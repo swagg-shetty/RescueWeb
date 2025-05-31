@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Global Disaster Relief Initiative</title>
+    <style>
+        :root {
+            --primary-color: #1a75bc;
+            --text-color: #333;
+            --bg-color: #fff;
+            --secondary-bg: #f7f7f7;
+            --quote-bg: #f1f9fe;
+            --card-bg: white;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode {
+            --primary-color: #3a97de;
+            --text-color: #e0e0e0;
+            --bg-color: #121212;
+            --secondary-bg: #1e1e1e;
+            --quote-bg: #1a2635;
+            --card-bg: #2d2d2d;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        nav {
+            background-color: var(--primary-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .home-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin-right: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .home-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .home-icon {
+            margin-right: 6px;
+        }
+        
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .dark-mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0 4rem;
+            text-align: center;
+            margin-top: -1.5rem;
+        }
+        
+        .mission-container {
+            background-color: var(--secondary-bg);
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .mission-statement {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--primary-color);
+            font-weight: 300;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 3rem 0;
+        }
+        
+        .stat-box {
+            flex-basis: 22%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-text {
+            font-size: 1rem;
+        }
+        
+        .quote-container {
+            background-color: var(--quote-bg);
+            padding: 2rem 0;
+            margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .quote-marquee {
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+            display: flex;
+        }
+        
+        .quote-box {
+            display: inline-block;
+            min-width: 300px;
+            margin: 0 2rem;
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            white-space: normal;
+            width: 300px;
+        }
+        
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .history-section, .approach-section, .team-section {
+            margin: 3rem 0;
+        }
+        
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .stat-box {
+                flex-basis: 45%;
+            }
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-buttons {
+                margin-top: 10px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .stat-box {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <h1 class="logo-text">Global Disaster Relief</h1>
+            <div class="nav-buttons">
+                <a href="/" class="home-btn">
+                    <svg class="home-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Home
+                </a>
+                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <header>
+        <div class="container">
+            <h1>About The Global Disaster Relief Initiative</h1>
+        </div>
+    </header>
+    
+    <section class="mission-container">
+        <div class="container">
+            <p class="mission-statement">Our mission is to provide immediate, effective, and sustainable assistance to communities affected by natural disasters worldwide, helping them recover and rebuild stronger than before.</p>
+        </div>
+    </section>
+    
+    <section class="container">
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number">172</div>
+                <div class="stat-text">Disaster Response Operations Completed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">4.3M</div>
+                <div class="stat-text">People Assisted Worldwide</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">48</div>
+                <div class="stat-text">Countries With Active Programs</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">$89M</div>
+                <div class="stat-text">Relief Funds Deployed in 2024</div>
+            </div>
+        </div>
+        
+        <div class="history-section">
+            <h2>Our History</h2>
+            <p>Founded in 2009 in the aftermath of the devastating South Pacific Tsunami, the Global Disaster Relief Initiative began as a small volunteer group committed to helping affected communities in Samoa. Since then, we've grown into an international organization with a presence in 48 countries.</p>
+            <p>Over the past 15 years, we've responded to earthquakes, hurricanes, floods, wildfires, and humanitarian crises across six continents. Our growth has been driven by our commitment to communities and our evidence-based approach to disaster relief and recovery.</p>
+        </div>
+        
+        <div class="approach-section">
+            <h2>Our Approach</h2>
+            <p>We believe in a three-phase approach to disaster management:</p>
+            <ul>
+                <li><strong>Immediate Response:</strong> Within 72 hours of a disaster, our rapid response teams deploy essential supplies, medical aid, and emergency shelter to affected areas.</li>
+                <li><strong>Recovery Support:</strong> In the weeks and months following a disaster, we work with communities to restore access to clean water, rebuild infrastructure, and provide psychological support to survivors.</li>
+                <li><strong>Resilience Building:</strong> Our long-term programs focus on disaster preparedness, community education, and sustainable rebuilding practices that reduce vulnerability to future disasters.</li>
+            </ul>
+            <p>In 2024 alone, we've distributed over 1.8 million emergency kits, constructed 12,500 temporary shelters, and provided clean water to more than 850,000 people in disaster-affected regions.</p>
+        </div>
+    </section>
+    
+    <section class="quote-container">
+        <div class="quote-marquee">
+            <div class="quote-box">
+                <p class="quote-text">"The dedication and speed of the response team saved countless lives in our village after the flooding. They didn't just bring supplies; they brought hope."</p>
+                <p class="quote-author">- Maria Suarez, Community Leader, Philippines</p>
+            </div>
+            <div class="quote-box">
+                <p class="quote-text">"What sets this organization apart is their commitment to staying long after the cameras have gone. They helped us rebuild in ways that will protect us from future disasters."</p>
+                <p class="quote-author">- Raj Patel, School Principal, Nepal</p>
+            </div>
+            <div class="quote-box">
+                <p class="quote-text">"The training programs they implemented have empowered our community to respond quickly to early warning signs. We're now better prepared than ever before."</p>
+                <p class="quote-author">- Emmanuel Okoro, Community Coordinator, Nigeria</p>
+            </div>
+            <div class="quote-box">
+                <p class="quote-text">"When the earthquake hit, we lost everything. The Global Disaster Relief Initiative not only helped us rebuild our homes but also our livelihoods."</p>
+                <p class="quote-author">- Ana Martinez, Small Business Owner, Mexico</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="container">
+        <div class="team-section">
+            <h2>Our Team</h2>
+            <p>Behind our work is a dedicated team of 230 full-time staff and over 5,000 trained volunteers worldwide. Our team includes:</p>
+            <ul>
+                <li>65 Emergency Response Specialists</li>
+                <li>42 Public Health Professionals</li>
+                <li>28 Civil Engineers</li>
+                <li>18 Psychologists specialized in trauma</li>
+                <li>77 Regional Coordinators</li>
+            </ul>
+            <p>Additionally, we partner with 140 local organizations across the globe to ensure our response is culturally sensitive and aligned with community needs.</p>
+            
+            <h3>Financial Transparency</h3>
+            <p>We're committed to transparency and responsible stewardship of resources:</p>
+            <ul>
+                <li>87% of all funds go directly to program services</li>
+                <li>9% to administrative costs</li>
+                <li>4% to fundraising efforts</li>
+            </ul>
+            <p>We've maintained a 4-star rating from Charity Navigator for 8 consecutive years and are accredited by the International Aid Transparency Initiative.</p>
+        </div>
+    </section>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        // Check for saved dark mode preference or use preferred color scheme
+        if (localStorage.getItem('darkMode') === 'enabled' || 
+            (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && 
+            localStorage.getItem('darkMode') !== 'disabled')) {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // Toggle dark mode on button click
+        darkModeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+            } else {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+            }
+        });
+    </script>
+</body>
+</html>

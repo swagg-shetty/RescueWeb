@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Help - Disaster Management System</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d47a1;
+            --primary-light: #e8f0fe;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --border-color: #ddd;
+        }
+        
+        .dark-mode {
+            --primary-color: #4285f4;
+            --primary-dark: #2a56c6;
+            --primary-light: #2c3e50;
+            --text-color: #f0f0f0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .home-link {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-dark);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+        
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .full-width {
+            grid-column: span 2;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Disaster Management System</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link home-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                    </svg>
+                    Home
+                </a>
+                <a href="/checkstatus" class="nav-link status-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z"/>
+                    </svg>
+                    Check Status
+                </a>
+            </div>
+            <div class="toggle-container">
+                <span>Dark Mode</span>
+                <label class="toggle">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h1>Request Help</h1>
+            <p>Complete this form to request resources for disaster victims. All requests will be prioritized based on urgency and availability.</p>
+            
+            <form id="helpRequestForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="victimName">Victim Name</label>
+                    <input type="text" id="victimName" name="victimName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="resourceId">Resource Type</label>
+                    <select id="resourceId" name="resourceId" class="form-control" required>
+                        <option value="">Select Resource</option>
+                        <option value="1">Water</option>
+                        <option value="2">Food</option>
+                        <option value="3">Medicine</option>
+                        <option value="4">Clothing</option>
+                        <option value="5">Shelter</option>
+                        <option value="6">First Aid Kit</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantity">Quantity Requested</label>
+                    <input type="number" id="quantity" name="quantity" min="1" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select id="priority" name="priority" class="form-control" required>
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM" selected>Medium</option>
+                        <option value="HIGH">High</option>
+                        <option value="CRITICAL">Critical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Current Location</label>
+                    <input type="text" id="location" name="location" class="form-control">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="notes">Description</label>
+                    <textarea id="notes" name="notes" rows="4" class="form-control"></textarea>
+                </div>
+                
+                <div class="form-group full-width">
+                    <button type="submit" class="btn" id="submitBtn">Submit Request</button>
+                    <button type="button" class="btn" id="cancelBtn" style="display: none;">Cancel Edit</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>My Previous Requests</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: var(--primary-light);">
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Request ID</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Victim Name</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Resource</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Quantity</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Status</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Priority</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Requested Date</th>
+                        <th style="padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color);">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="requestsTableBody">
+                    <tr>
+                        <td colspan="8" style="padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color);">No previous requests found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const form = document.getElementById('helpRequestForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        
+        // Dark mode functionality
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+        
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+        
+        // Form submission functionality
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                email: document.getElementById('email').value,
+                victimName: document.getElementById('victimName').value,
+                resourceId: document.getElementById('resourceId').value,
+                quantity: document.getElementById('quantity').value,
+                priority: document.getElementById('priority').value,
+                location: document.getElementById('location').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            const requestId = form.getAttribute('data-request-id');
+            let url = '/submit-request';
+            let method = 'POST';
+            
+            // If editing an existing request
+            if (requestId) {
+                url = `/update-request/${requestId}`;
+                method = 'PUT';
+            }
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(requestId ? 'Request updated successfully!' : 'Request submitted successfully!');
+                resetForm();
+                loadPreviousRequests(formData.email);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+        
+        // Cancel button functionality
+        cancelBtn.addEventListener('click', function() {
+            resetForm();
+        });
+        
+        // Function to reset form and UI state
+        function resetForm() {
+            form.reset();
+            form.removeAttribute('data-request-id');
+            submitBtn.textContent = 'Submit Request';
+            cancelBtn.style.display = 'none';
+        }
+        
+        // Function to load previous requests for a user
+        function loadPreviousRequests(email) {
+            if (!email) {
+                email = document.getElementById('email').value;
+            }
+            
+            if (!email) {
+                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="8" style="padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color);">Enter your email to see previous requests.</td></tr>';
+                return;
+            }
+            
+            fetch(`/get-requests?email=${encodeURIComponent(email)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(requests => {
+                    const tableBody = document.getElementById('requestsTableBody');
+                    tableBody.innerHTML = '';
+                    
+                    if (requests.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="8" style="padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color);">No previous requests found.</td></tr>';
+                        return;
+                    }
+                    
+                    requests.forEach(request => {
+                        // Format the date
+                        const requestDate = new Date(request.requested_date);
+                        const formattedDate = requestDate.toLocaleDateString() + ' ' + requestDate.toLocaleTimeString();
+                        
+                        // Set styles based on status and priority
+                        let statusStyle = '';
+                        switch(request.status.toLowerCase()) {
+                            case 'pending':
+                                statusStyle = 'color: #f39c12;';
+                                break;
+                            case 'processing':
+                                statusStyle = 'color: #3498db;';
+                                break;
+                            case 'completed':
+                                statusStyle = 'color: #2ecc71;';
+                                break;
+                        }
+                        
+                        let priorityStyle = '';
+                        switch(request.priority.toLowerCase()) {
+                            case 'low':
+                                priorityStyle = 'color: #7f8c8d;';
+                                break;
+                            case 'medium':
+                                priorityStyle = 'color: #3498db;';
+                                break;
+                            case 'high':
+                                priorityStyle = 'color: #f39c12;';
+                                break;
+                            case 'critical':
+                                priorityStyle = 'color: #e74c3c;';
+                                break;
+                        }
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">${request.request_id}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">${request.victim_name}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">${request.resource_name}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">${request.quantity}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color); text-transform: capitalize; font-weight: bold; ${statusStyle}">${request.status}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color); text-transform: capitalize; ${priorityStyle}">${request.priority}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">${formattedDate}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">
+                                <button class="edit-btn" onclick="editRequest(${request.request_id})">Edit</button>
+                                <button class="delete-btn" onclick="deleteRequest(${request.request_id})">Delete</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching requests:', error);
+                    document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="8" style="padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color);">Error loading requests.</td></tr>';
+                });
+        }
+        
+        // Function to edit a request
+        window.editRequest = function(requestId) {
+            fetch(`/get-request/${requestId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(request => {
+                    // Fill the form with request data
+                    document.getElementById('email').value = request.email;
+                    document.getElementById('victimName').value = request.victim_name;
+                    document.getElementById('resourceId').value = request.resource_id;
+                    document.getElementById('quantity').value = request.quantity;
+                    document.getElementById('priority').value = request.priority;
+                    document.getElementById('location').value = request.location;
+                    document.getElementById('notes').value = request.additional_notes;
+                    
+                    // Update form state
+                    form.setAttribute('data-request-id', request.request_id);
+                    submitBtn.textContent = 'Update Request';
+                    cancelBtn.style.display = 'inline-block';
+                    
+                    // Scroll to form
+                    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error fetching request details: ' + error.message);
+                });
+        };
+        
+        // Function to delete a request
+        window.deleteRequest = function(requestId) {
+            if (!confirm('Are you sure you want to delete this request?')) {
+                return;
+            }
+            
+            const email = document.getElementById('email').value;
+            
+            fetch(`/delete-request/${requestId}?email=${encodeURIComponent(email)}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Request deleted successfully!');
+                    loadPreviousRequests(email);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting request: ' + error.message);
+                });
+        };
+        
+        // Auto-load requests when email changes
+        document.getElementById('email').addEventListener('change', function() {
+            loadPreviousRequests(this.value);
+        });
+        
+        // Load any requests on page load if email is filled
+        window.onload = function() {
+            const email = document.getElementById('email').value;
+            if (email) {
+                loadPreviousRequests(email);
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Relief Assistance</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #2563eb;
+            --background-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: white;
+            --table-even: #f2f7ff;
+            --border-color: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #0c1e4a;
+            --secondary-color: #1d4ed8;
+            --background-color: #121826;
+            --text-color: #e5e7eb;
+            --card-bg: #1f2937;
+            --table-even: #283548;
+            --border-color: #4b5563;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding-top: 120px; /* Space for fixed header */
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav {
+            background-color: var(--secondary-color);
+            display: flex;
+            padding: 0.5rem;
+            justify-content: space-between;
+        }
+        
+        nav .nav-links {
+            display: flex;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            background-color: var(--primary-color);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 1rem;
+        }
+        
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }
+        
+        h1, h2, h3 {
+            color: var(--secondary-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--table-even);
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+        
+        button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .delete-btn {
+            background-color: #dc2626;
+        }
+        
+        .delete-btn:hover {
+            background-color: #b91c1c;
+        }
+        
+        .toggle-btn {
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        /* Form styles */
+        .form-container {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .submit-btn {
+            background-color: #10B981;
+        }
+
+        .submit-btn:hover {
+            background-color: #059669;
+        }
+
+        /* Toggle switch for dark mode */
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--secondary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Disaster Relief Assistance Center</h1>
+        <nav>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="#darkModeToggle" id="toggle-view">Toggle View</a>
+                <a href="#registration-form">Register Relief Center</a>
+            </div>
+            <div>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <div id="hospitals-container" class="container">
+            <h2>Available Relief Centers</h2>
+            <p>Current hospital and shelter capacity and contact information for emergency situations.</p>
+            
+            <!-- Hospitals Table -->
+            <h3>Hospitals</h3>
+            <table id="hospitals-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Capacity</th>
+                        <th>Current Occupancy</th>
+                        <th>Contact Person</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded from database -->
+                </tbody>
+            </table>
+            
+            <!-- Shelters Table -->
+            <h3>Shelters</h3>
+            <table id="shelters-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Capacity</th>
+                        <th>Current Occupancy</th>
+                        <th>Contact Person</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded from database -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="resources-container" class="container hidden">
+            <h2>Available Resources</h2>
+            <p>Emergency supplies and resources available for distribution.</p>
+            <table id="resources-table">
+                <thead>
+                    <tr>
+                        <th>Resource Name</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Location</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded from database -->
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Registration Form -->
+        <div id="registration-form" class="container form-container">
+            <h2>Register New Relief Center or Resources</h2>
+<p>Please fill out the form below to register a new hospital, shelter, or resource.</p>
+
+<div class="form-group">
+    <label for="formType">What would you like to register?</label>
+    <select id="formType" onchange="toggleFormFields()">
+        <option value="hospital">Hospital</option>
+        <option value="shelter">Shelter</option>
+        <option value="resource">Resource</option>
+    </select>
+</div>
+
+<!-- Hospital Form -->
+<form id="hospitalForm" action="/hospitals" method="POST">
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="hospitalName">Hospital Name*</label>
+                <input type="text" id="hospitalName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="hospitalCapacity">Capacity*</label>
+                <input type="number" id="hospitalCapacity" name="capacity" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="hospitalOccupancy">Current Occupancy</label>
+                <input type="number" id="hospitalOccupancy" name="current_occupancy" min="0">
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="hospitalContact">Contact Person*</label>
+                <input type="text" id="hospitalContact" name="contact_person" required>
+            </div>
+            <div class="form-group">
+                <label for="hospitalPhone">Phone Number*</label>
+                <input type="tel" id="hospitalPhone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="hospitalEmail">Email</label>
+                <input type="email" id="hospitalEmail" name="email">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hospitalLocation">Location/Address*</label>
+        <input type="text" id="hospitalLocation" name="location" required>
+    </div>
+    <button type="submit" class="submit-btn">Register Hospital</button>
+</form>
+
+<!-- Shelter Form -->
+<form id="shelterForm" action="/shelters" method="POST" class="hidden">
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="shelterName">Shelter Name*</label>
+                <input type="text" id="shelterName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="shelterCapacity">Capacity*</label>
+                <input type="number" id="shelterCapacity" name="capacity" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="shelterOccupancy">Current Occupancy</label>
+                <input type="number" id="shelterOccupancy" name="current_occupancy" min="0">
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="shelterContact">Contact Person*</label>
+                <input type="text" id="shelterContact" name="contact_person" required>
+            </div>
+            <div class="form-group">
+                <label for="shelterPhone">Phone Number*</label>
+                <input type="tel" id="shelterPhone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="shelterEmail">Email</label>
+                <input type="email" id="shelterEmail" name="email">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="shelterAddress">Address*</label>
+        <input type="text" id="shelterAddress" name="address" required>
+    </div>
+    <button type="submit" class="submit-btn">Register Shelter</button>
+</form>
+
+<!-- Resource Form -->
+<form id="resourceForm" action="/resources" method="POST" class="hidden">
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="resourceType">Resource Type*</label>
+                <select id="resourceType" name="resource_id" required>
+                    <option value="">Select Resource Type</option>
+                    <option value="1">WATER</option>
+                    <option value="2">FOOD</option>
+                    <option value="3">MEDICINE</option>
+                    <option value="4">CLOTHING</option>
+                    <option value="5">SHELTER</option>
+                    <option value="6">FIRST AID KIT</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="resourceQuantity">Quantity*</label>
+                <input type="number" id="resourceQuantity" name="quantity" min="1" required>
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="resourceUnit">Unit*</label>
+                <input type="text" id="resourceUnit" name="unit" placeholder="e.g., boxes, liters" required>
+            </div>
+            <div class="form-group">
+                <label for="resourceExpiry">Expiry Date (if applicable)</label>
+                <input type="date" id="resourceExpiry" name="expiry_date">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="resourceLocation">Storage Location*</label>
+        <input type="text" id="resourceLocation" name="location" required>
+    </div>
+    <button type="submit" class="submit-btn">Register Resource</button>
+</form>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Disaster Relief Assistance Center | Emergency Response System</p>
+    </footer>
+
+
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Theme preference
+    const savedTheme = localStorage.getItem('darkMode');
+    const prefersColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'enabled' || (savedTheme === null && prefersColorScheme)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-toggle').checked = true;
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.getElementById('theme-toggle').checked = false;
+    }
+
+    // Handle success messages from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('success');
+    const errorMessage = urlParams.get('error');
+
+    if (successMessage === 'true') {
+        alert('Registration successful!');
+        history.replaceState(null, '', window.location.pathname);
+    } else if (errorMessage) {
+        alert(decodeURIComponent(errorMessage));
+    }
+
+    // Fetch data
+    fetchHospitals();
+    fetchShelters();
+    fetchResources();
+
+    // View toggle
+    const toggleView = document.getElementById('toggle-view');
+    if (toggleView) {
+        toggleView.addEventListener('click', function () {
+            const hospitalsContainer = document.getElementById('hospitals-container');
+            const resourcesContainer = document.getElementById('resources-container');
+
+            if (hospitalsContainer && resourcesContainer) {
+                const showHospitals = hospitalsContainer.classList.contains('hidden');
+                hospitalsContainer.classList.toggle('hidden', !showHospitals);
+                resourcesContainer.classList.toggle('hidden', showHospitals);
+                this.textContent = showHospitals ? 'Show Relief Centers' : 'Show Resources';
+            }
+        });
+    }
+
+    // Theme toggle switch
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('change', function () {
+            const isDark = this.checked;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+    }
+
+    // Form toggle dropdown
+    const formTypeSelect = document.getElementById('formType');
+    if (formTypeSelect) {
+        formTypeSelect.addEventListener('change', toggleFormFields);
+    }
+
+    // Initialize form visibility
+    toggleFormFields();
+});
+
+function toggleFormFields() {
+    const formType = document.getElementById('formType').value;
+    const hospitalForm = document.getElementById('hospitalForm');
+    const shelterForm = document.getElementById('shelterForm');
+    const resourceForm = document.getElementById('resourceForm');
+
+    if (hospitalForm) hospitalForm.classList.add('hidden');
+    if (shelterForm) shelterForm.classList.add('hidden');
+    if (resourceForm) resourceForm.classList.add('hidden');
+
+    if (formType === 'hospital' && hospitalForm) hospitalForm.classList.remove('hidden');
+    if (formType === 'shelter' && shelterForm) shelterForm.classList.remove('hidden');
+    if (formType === 'resource' && resourceForm) resourceForm.classList.remove('hidden');
+}
+
+// Fetch/display hospitals
+async function fetchHospitals() {
+    try {
+        const res = await fetch('/hospitals');
+        const data = await res.json();
+        const tbody = document.querySelector('#hospitals-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = data.length ? '' : '<tr><td colspan="6" class="no-data">No hospitals available</td>';
+        data.forEach(h => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${h.name || '-'}</td>
+                <td>${h.capacity || '-'}</td>
+                <td>${h.current_occupancy || '0'}</td>
+                <td>${h.contact_person || '-'}</td>
+                <td>${h.phone || '-'}</td>
+                <td>${h.location || '-'}</td>`;
+            tbody.appendChild(row);
+        });
+    } catch (e) {
+        console.error('Hospital fetch failed:', e);
+    }
+}
+
+// Fetch/display shelters
+async function fetchShelters() {
+    try {
+        const res = await fetch('/shelters');
+        const data = await res.json();
+        const tbody = document.querySelector('#shelters-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = data.length ? '' : '<tr><td colspan="6" class="no-data">No shelters available</td>';
+        data.forEach(s => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${s.name || '-'}</td>
+                <td>${s.capacity || '-'}</td>
+                <td>${s.current_occupancy || '0'}</td>
+                <td>${s.contact_person || '-'}</td>
+                <td>${s.phone || '-'}</td>
+                <td>${s.address || '-'}</td>`;
+            tbody.appendChild(row);
+        });
+    } catch (e) {
+        console.error('Shelter fetch failed:', e);
+    }
+}
+
+// Fetch/display resources
+async function fetchResources() {
+    try {
+        const res = await fetch('/resources');
+        const data = await res.json();
+        const tbody = document.querySelector('#resources-table tbody');
+        if (!tbody) return;
+        tbody.innerHTML = data.length ? '' : '<tr><td colspan="5" class="no-data">No resources available</td>';
+        data.forEach(r => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${r.resource_name || '-'}</td>
+                <td>${r.quantity || '0'}</td>
+                <td>${r.unit || '-'}</td>
+                <td>${r.location || '-'}</td>
+                <td>${r.expiry_date ? new Date(r.expiry_date).toLocaleDateString() : '-'}</td>`;
+            tbody.appendChild(row);
+        });
+    } catch (e) {
+        console.error('Resource fetch failed:', e);
+    }
+}
+</script>
+
+</body>
+</html>

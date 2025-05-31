@@ -1,0 +1,2375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Assistance - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #1abc9c;
+            --dark: #34495e;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .menu {
+            padding: 15px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .greeting h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        .greeting p {
+            color: var(--gray);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stat-header h3 {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .primary-bg {
+            background-color: var(--primary);
+        }
+        
+        .secondary-bg {
+            background-color: var(--secondary);
+        }
+        
+        .danger-bg {
+            background-color: var(--danger);
+        }
+        
+        .warning-bg {
+            background-color: var(--warning);
+        }
+        
+        .info-bg {
+            background-color: var(--info);
+        }
+        
+        .stat-value {
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        
+        /* Table Container */
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .search-box {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 250px;
+            font-size: 0.9rem;
+        }
+        
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .data-table .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+        
+        /* Table Footer/Pagination */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .page-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .stats-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .user-info {
+                margin-top: 10px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .table-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* For loading animation */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            background-color: var(--secondary);
+        }
+
+        .notification-error {
+            background-color: var(--danger);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-affected { background-color: #ffecb3; color: #785700; }
+        .status-rescued { background-color: #c8e6c9; color: #2e7d32; }
+        .status-hospitalized { background-color: #bbdefb; color: #1565c0; }
+        .status-deceased { background-color: #ffcdd2; color: #c62828; }
+        .status-pending { background-color: #fff9c4; color: #f57f17; }
+        .status-approved { background-color: #dcedc8; color: #33691e; }
+        .status-fulfilled { background-color: #b3e5fc; color: #0277bd; }
+        .status-rejected { background-color: #ffccbc; color: #bf360c; }
+        .status-received { background-color: #e1bee7; color: #6a1b9a; }
+        .status-processed { background-color: #c5cae9; color: #283593; }
+        .status-distributed { background-color: #b2dfdb; color: #00695c; }
+        .status-available { background-color: #c8e6c9; color: #2e7d32; }
+        .status-in-use { background-color: #bbdefb; color: #1565c0; }
+        .status-maintenance { background-color: #ffcdd2; color: #c62828; }
+        .status-active { background-color: #c8e6c9; color: #2e7d32; }
+        .status-inactive { background-color: #ffcdd2; color: #c62828; }
+        .status-on-mission { background-color: #bbdefb; color: #1565c0; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Disaster Assist</h2>
+                <p>Admin Dashboard</p>
+            </div>
+            <div class="menu">
+                <div class="menu-item" data-tab="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="menu-item active" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item" data-tab="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </div>
+                <div class="menu-item" data-tab="requests">
+                    <i class="fas fa-hands-helping"></i>
+                    <span>Requests</span>
+                </div>
+                <div class="menu-item" data-tab="resources">
+                    <i class="fas fa-box"></i>
+                    <span>Resources</span>
+                </div>
+                <div class="menu-item" data-tab="donations">
+                    <i class="fas fa-gift"></i>
+                    <span>Donations</span>
+                </div>
+                <div class="menu-item" data-tab="volunteers">
+                    <i class="fas fa-people-carry"></i>
+                    <span>Volunteers</span>
+                </div>
+                <div class="menu-item" data-tab="vehicles">
+                    <i class="fas fa-truck"></i>
+                    <span>Vehicles</span>
+                </div>
+                <div class="menu-item" data-tab="organizations">
+                    <i class="fas fa-building"></i>
+                    <span>Organizations</span>
+                </div>
+                <div class="menu-item" data-tab="hospitals">
+                    <i class="fas fa-hospital"></i>
+                    <span>Hospitals</span>
+                </div>
+                <div class="menu-item" data-tab="shelters">
+                    <i class="fas fa-house-user"></i>
+                    <span>Shelters</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </div>
+                <div class="greeting">
+                    <h1>Welcome, Admin</h1>
+                    <p>Here's what's happening with your disaster assistance platform today.</p>
+                </div>
+                <div class="user-info">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h3>Admin User</h3>
+                        <small>Super Admin</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab Content -->
+            <div id="dashboard" class="tab-content active">
+                <!-- Statistics Row -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Users</h3>
+                            <div class="stat-icon primary-bg">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="total-users">0</div>
+                        <div class="stat-label">Registered Users</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Volunteers</h3>
+                            <div class="stat-icon secondary-bg">
+                                <i class="fas fa-hands-helping"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="total-volunteers">0</div>
+                        <div class="stat-label">Active Volunteers</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Pending Requests</h3>
+                            <div class="stat-icon warning-bg">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="total-requests">0</div>
+                        <div class="stat-label">Need Attention</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Available Vehicles</h3>
+                            <div class="stat-icon info-bg">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="total-vehicles">0</div>
+                        <div class="stat-label">Active Vehicles</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Recent Activities</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search...">
+                            <button class="btn btn-primary" id="refresh-activities">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Type</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activities-tbody">
+                            <!-- Activities will be loaded dynamically -->
+                            <tr>
+                                <td colspan="5" class="text-center">Loading activities...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="table-footer">
+                        <div>Showing recent activities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Tab Content -->
+            <div id="users" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Users Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search users...">
+                            <button class="btn btn-primary" id="add-user-btn">
+                                <i class="fas fa-plus"></i> Add User
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <!-- User data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="5" class="text-center">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Requests Tab Content -->
+            <div id="requests" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Request Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search requests...">
+                            <button class="btn btn-primary" id="add-request-btn">
+                                <i class="fas fa-plus"></i> New Request
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Victim Name</th>
+                                <th>Resource</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Requested Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-tbody">
+                            <!-- Requests data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading requests...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Resources Tab Content -->
+            <div id="resources" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Resources Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search resources...">
+                            <button class="btn btn-primary" id="add-resource-btn">
+                                <i class="fas fa-plus"></i> Add Resource
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resource Name</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Location</th>
+                                <th>Expiry Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resources-tbody">
+                            <!-- Resources data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="7" class="text-center">Loading resources...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Donations Tab Content -->
+            <div id="donations" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Donations Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search donations...">
+                            <button class="btn btn-primary" id="add-donation-btn">
+                                <i class="fas fa-plus"></i> Add Donation
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Donor Name</th>
+                                <th>Email</th>
+                                <th>Organization</th>
+                                <th>Type</th>
+                                <th>Amount/Quantity</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donations-tbody">
+                            <!-- Donations data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading donations...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Volunteers Tab Content -->
+            <div id="volunteers" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Volunteer Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search volunteers...">
+                            <button class="btn btn-primary" id="add-volunteer-btn">
+                                <i class="fas fa-plus"></i> Add Volunteer
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Organization</th>
+                                <th>Skills</th>
+                                <th>Availability</th>
+                                <th>Area</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="volunteers-tbody">
+                            <!-- Volunteers data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading volunteers...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Organizations Tab Content -->
+            <div id="organizations" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Organizations Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search organizations...">
+                            <button class="btn btn-primary" id="add-org-btn">
+                                <i class="fas fa-plus"></i> Add Organization
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Contact Person</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="organizations-tbody">
+                            <!-- Organizations data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading organizations...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Vehicles Tab Content -->
+            <div id="vehicles" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Vehicles Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search vehicles...">
+                            <button class="btn btn-primary" id="add-vehicle-btn">
+                                <i class="fas fa-plus"></i> Add Vehicle
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Registration</th>
+                                <th>Capacity</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Driver Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehicles-tbody">
+                            <!-- Vehicles data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading vehicles...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Hospitals Tab Content -->
+            <div id="hospitals" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Hospitals Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search hospitals...">
+                            <button class="btn btn-primary" id="add-hospital-btn">
+                                <i class="fas fa-plus"></i> Add Hospital
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Capacity</th>
+                                <th>Occupancy</th>
+                                <th>Contact Person</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hospitals-tbody">
+                            <!-- Hospitals data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading hospitals...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Shelters Tab Content -->
+            <div id="shelters" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Shelters Management</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Search shelters...">
+                            <button class="btn btn-primary" id="add-shelter-btn">
+                                <i class="fas fa-plus"></i> Add Shelter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Capacity</th>
+                                <th>Occupancy</th>
+                                <th>Contact Person</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shelters-tbody">
+                            <!-- Shelters data will be loaded dynamically -->
+                            <tr>
+                                <td colspan="8" class="text-center">Loading shelters...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for adding/editing entities -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Item</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-form-container">
+                <!-- Form will be loaded dynamically based on the action -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-save">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Action</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure you want to proceed with this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-action">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" style="display: none;"></div>
+    
+    <!-- Inline JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup sidebar navigation
+            setupSidebarNavigation();
+            
+            // Setup back navigation
+            setupBackNavigation();
+            
+            // Load dashboard statistics
+            loadDashboardStats();
+            
+            // Load recent activities (first tab content)
+            loadRecentActivities();
+            
+            // Setup modal handling
+            setupModalHandling();
+            
+            // Setup add buttons
+            setupAddButtons();
+            
+            // Setup refresh buttons
+            document.getElementById('refresh-activities').addEventListener('click', loadRecentActivities);
+        });
+
+        // Setup sidebar navigation
+        function setupSidebarNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    if(tabName === 'home') {
+                        window.location.href = '/';
+                        return;
+                    }
+                    
+                    // Remove active class from all menu items and tab content
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show the corresponding tab content
+                    const tabContent = document.getElementById(tabName);
+                    if (tabContent) {
+                        tabContent.classList.add('active');
+                        
+                        // Load data for the specific tab
+                        switch(tabName) {
+                            case 'dashboard':
+                                loadDashboardStats();
+                                loadRecentActivities();
+                                break;
+                            case 'users':
+                                loadUsers();
+                                break;
+                            case 'requests':
+                                loadRequests();
+                                break;
+                            case 'resources':
+                                loadResources();
+                                break;
+                            case 'donations':
+                                loadDonations();
+                                break;
+                            case 'volunteers':
+                                loadVolunteers();
+                                break;
+                            case 'vehicles':
+                                loadVehicles();
+                                break;
+                            case 'organizations':
+                                loadOrganizations();
+                                break;
+                            case 'hospitals':
+                                loadHospitals();
+                                break;
+                            case 'shelters':
+                                loadShelters();
+                                break;
+                        }
+                    }
+                });
+            });
+        }
+
+        // Setup back navigation
+        function setupBackNavigation() {
+            // Set up back button
+            document.querySelector('.back-btn').addEventListener('click', function() {
+                window.location.href = '/';
+            });
+        }
+
+        // Setup modal handling
+        function setupModalHandling() {
+            const modal = document.getElementById('modal');
+            const confirmModal = document.getElementById('confirm-modal');
+            const modalClose = document.querySelectorAll('.modal-close, .modal-cancel');
+            
+            // Close modals when clicking on X or Cancel
+            modalClose.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    confirmModal.style.display = 'none';
+                });
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+                if (e.target === confirmModal) {
+                    confirmModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Setup add buttons
+        function setupAddButtons() {
+            const addButtons = {
+                'add-user-btn': { title: 'Add New User', entity: 'users' },
+                'add-resource-btn': { title: 'Add New Resource', entity: 'resources' },
+                'add-request-btn': { title: 'Add New Request', entity: 'requests' },
+                'add-donation-btn': { title: 'Add New Donation', entity: 'donations' },
+                'add-volunteer-btn': { title: 'Add New Volunteer', entity: 'volunteers' },
+                'add-vehicle-btn': { title: 'Add New Vehicle', entity: 'vehicles' },
+                'add-org-btn': { title: 'Add New Organization', entity: 'organizations' },
+                'add-hospital-btn': { title: 'Add New Hospital', entity: 'hospitals' },
+                'add-shelter-btn': { title: 'Add New Shelter', entity: 'shelters' }
+            };
+        
+            Object.keys(addButtons).forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        showAddForm(addButtons[btnId].title, addButtons[btnId].entity);
+                    });
+                }
+            });
+        }
+
+        // Load dashboard statistics
+        function loadDashboardStats() {
+            fetch('/dashboard/stats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('total-users').textContent = data.totalUsers;
+                    document.getElementById('total-volunteers').textContent = data.totalVolunteers;
+                    document.getElementById('total-requests').textContent = data.totalRequests;
+                    document.getElementById('total-vehicles').textContent = data.totalVehicles;
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard stats:', error);
+                    showNotification('Error loading dashboard statistics', 'error');
+                });
+        }
+
+        // Load recent activities
+        function loadRecentActivities() {
+            fetch('/dashboard/recent-activities')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(activities => {
+                    const tbody = document.getElementById('activities-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (activities.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No recent activities found</td></tr>';
+                        return;
+                    }
+                    
+                    activities.forEach(activity => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${activity.activity}</td>
+                            <td>${activity.user}</td>
+                            <td>${activity.type}</td>
+                            <td>${activity.time}</td>
+                            <td><span class="status-badge status-${activity.status.toLowerCase()}">${activity.status}</span></td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading recent activities:', error);
+                    document.getElementById('activities-tbody').innerHTML = 
+                        '<tr><td colspan="5" class="text-center">Error loading activities</td></tr>';
+                });
+        }
+
+        // Load users data
+        function loadUsers() {
+            fetch('/dashboard/users')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(users => {
+                    const tbody = document.getElementById('users-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No users found</td></tr>';
+                        return;
+                    }
+                    
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.user_id}</td>
+                            <td>${user.fname}</td>
+                            <td>${user.email}</td>
+                            <td>${user.username}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${user.user_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${user.user_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${user.user_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('users');
+                })
+                .catch(error => {
+                    console.error('Error loading users:', error);
+                    document.getElementById('users-tbody').innerHTML = 
+                        '<tr><td colspan="5" class="text-center">Error loading users</td></tr>';
+                });
+        }
+
+        // Load requests data
+        function loadRequests() {
+            fetch('/dashboard/requests')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(requests => {
+                    const tbody = document.getElementById('requests-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (requests.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No requests found</td></tr>';
+                        return;
+                    }
+                    
+                    requests.forEach(request => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${request.request_id}</td>
+                            <td>${request.victim_name}</td>
+                            <td>${request.resource_name}</td>
+                            <td>${request.quantity}</td>
+                            <td><span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></td>
+                            <td>${request.priority}</td>
+                            <td>${formatDate(request.requested_date)}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${request.request_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${request.request_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${request.request_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('requests');
+                })
+                .catch(error => {
+                    console.error('Error loading requests:', error);
+                    document.getElementById('requests-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading requests</td></tr>';
+                });
+        }
+
+        // Load resources data
+        function loadResources() {
+            fetch('/dashboard/resources')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(resources => {
+                    const tbody = document.getElementById('resources-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (resources.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No resources found</td></tr>';
+                        return;
+                    }
+                    
+                    resources.forEach(resource => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${resource.id}</td>
+                            <td>${resource.resource_name}</td>
+                            <td>${resource.quantity}</td>
+                            <td>${resource.unit}</td>
+                            <td>${resource.location}</td>
+                            <td>${resource.expiry_date ? formatDate(resource.expiry_date) : 'N/A'}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${resource.id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${resource.id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${resource.id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('resources');
+                })
+                .catch(error => {
+                    console.error('Error loading resources:', error);
+                    document.getElementById('resources-tbody').innerHTML = 
+                        '<tr><td colspan="7" class="text-center">Error loading resources</td></tr>';
+                });
+        }
+
+        // Load donations data
+        function loadDonations() {
+            fetch('/dashboard/donations')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(donations => {
+                    const tbody = document.getElementById('donations-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (donations.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No donations found</td></tr>';
+                        return;
+                    }
+                    
+                    donations.forEach(donation => {
+                        const row = document.createElement('tr');
+                        const amountDisplay = donation.donation_type === 'MONEY' 
+                            ? `$${donation.donation_amount}` 
+                            : `${donation.donation_type_qty || 'N/A'}`;
+                        
+                        row.innerHTML = `
+                            <td>${donation.donation_id}</td>
+                            <td>${donation.donar_name}</td>
+                            <td>${donation.donar_email || 'N/A'}</td>
+                            <td>${donation.donar_organization_name || 'N/A'}</td>
+                            <td>${donation.donation_type}</td>
+                            <td>${amountDisplay}</td>
+                            <td><span class="status-badge status-${donation.status.toLowerCase()}">${donation.status}</span></td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${donation.donation_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${donation.donation_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${donation.donation_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('donations');
+                })
+                .catch(error => {
+                    console.error('Error loading donations:', error);
+                    document.getElementById('donations-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading donations</td></tr>';
+                });
+        }
+
+        // Load volunteers data
+        function loadVolunteers() {
+            fetch('/dashboard/volunteers')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(volunteers => {
+                    const tbody = document.getElementById('volunteers-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (volunteers.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No volunteers found</td></tr>';
+                        return;
+                    }
+                    
+                    volunteers.forEach(volunteer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${volunteer.volunteer_id}</td>
+                            <td>${volunteer.user_name}</td>
+                            <td>${volunteer.vol_org || 'N/A'}</td>
+                            <td>${volunteer.skills}</td>
+                            <td>${volunteer.availability}</td>
+                            <td>${volunteer.vol_area || 'N/A'}</td>
+                            <td><span class="status-badge status-${volunteer.status.toLowerCase().replace(/\s+/g, '-')}">${volunteer.status}</span></td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${volunteer.volunteer_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${volunteer.volunteer_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${volunteer.volunteer_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('volunteers');
+                })
+                .catch(error => {
+                    console.error('Error loading volunteers:', error);
+                    document.getElementById('volunteers-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading volunteers</td></tr>';
+                });
+        }
+
+        // Load vehicles data
+        function loadVehicles() {
+            fetch('/dashboard/vehicles')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(vehicles => {
+                    const tbody = document.getElementById('vehicles-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (vehicles.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No vehicles found</td></tr>';
+                        return;
+                    }
+                    
+                    vehicles.forEach(vehicle => {
+                        const row = document.createElement('tr');
+                        const statusClass = vehicle.veh_status.toLowerCase().replace('-', '');
+                        
+                        row.innerHTML = `
+                            <td>${vehicle.vehicle_id}</td>
+                            <td>${vehicle.vehicle_type}</td>
+                            <td>${vehicle.registration_number}</td>
+                            <td>${vehicle.capacity}</td>
+                            <td>${vehicle.current_location || 'N/A'}</td>
+                            <td><span class="status-badge status-${statusClass}">${vehicle.veh_status}</span></td>
+                            <td>${vehicle.driver_contact || 'N/A'}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${vehicle.vehicle_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${vehicle.vehicle_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${vehicle.vehicle_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('vehicles');
+                })
+                .catch(error => {
+                    console.error('Error loading vehicles:', error);
+                    document.getElementById('vehicles-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading vehicles</td></tr>';
+                });
+        }
+
+        // Load organizations data
+        function loadOrganizations() {
+            fetch('/dashboard/organizations')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(organizations => {
+                    const tbody = document.getElementById('organizations-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (organizations.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No organizations found</td></tr>';
+                        return;
+                    }
+                    
+                    organizations.forEach(org => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${org.organization_id}</td>
+                            <td>${org.organization_name}</td>
+                            <td>${org.organization_type}</td>
+                            <td>${org.contact_person}</td>
+                            <td>${org.cp_email}</td>
+                            <td>${org.cp_phone}</td>
+                            <td>${org.address}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${org.organization_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${org.organization_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${org.organization_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('organizations');
+                })
+                .catch(error => {
+                    console.error('Error loading organizations:', error);
+                    document.getElementById('organizations-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading organizations</td></tr>';
+                });
+        }
+
+        // Load hospitals data
+        function loadHospitals() {
+            fetch('/dashboard/hospitals')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(hospitals => {
+                    const tbody = document.getElementById('hospitals-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (hospitals.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No hospitals found</td></tr>';
+                        return;
+                    }
+                    
+                    hospitals.forEach(hospital => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${hospital.hospital_id}</td>
+                            <td>${hospital.name}</td>
+                            <td>${hospital.capacity}</td>
+                            <td>${hospital.current_occupancy}</td>
+                            <td>${hospital.contact_person || 'N/A'}</td>
+                            <td>${hospital.phone}</td>
+                            <td>${hospital.location}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${hospital.hospital_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${hospital.hospital_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${hospital.hospital_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('hospitals');
+                })
+                .catch(error => {
+                    console.error('Error loading hospitals:', error);
+                    document.getElementById('hospitals-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading hospitals</td></tr>';
+                });
+        }
+
+        // Load shelters data
+        function loadShelters() {
+            fetch('/dashboard/shelters')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(shelters => {
+                    const tbody = document.getElementById('shelters-tbody');
+                    tbody.innerHTML = '';
+                    
+                    if (shelters.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No shelters found</td></tr>';
+                        return;
+                    }
+                    
+                    shelters.forEach(shelter => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${shelter.shelter_id}</td>
+                            <td>${shelter.name}</td>
+                            <td>${shelter.capacity}</td>
+                            <td>${shelter.current_occupancy}</td>
+                            <td>${shelter.contact_person || 'N/A'}</td>
+                            <td>${shelter.phone}</td>
+                            <td>${shelter.address}</td>
+                            <td class="actions">
+                                <span class="action-btn view-btn" data-id="${shelter.shelter_id}"><i class="fas fa-eye"></i></span>
+                                <span class="action-btn edit-btn" data-id="${shelter.shelter_id}"><i class="fas fa-edit"></i></span>
+                                <span class="action-btn delete-btn" data-id="${shelter.shelter_id}"><i class="fas fa-trash"></i></span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    // Set up action buttons
+                    setupActionButtons('shelters');
+                })
+                .catch(error => {
+                    console.error('Error loading shelters:', error);
+                    document.getElementById('shelters-tbody').innerHTML = 
+                        '<tr><td colspan="8" class="text-center">Error loading shelters</td></tr>';
+                });
+        }
+
+        // Setup action buttons
+        function setupActionButtons(entityType) {
+            // View buttons
+            document.querySelectorAll(`#${entityType}-tbody .view-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    viewEntity(entityType, id);
+                });
+            });
+            
+            // Edit buttons
+            document.querySelectorAll(`#${entityType}-tbody .edit-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    editEntity(entityType, id);
+                });
+            });
+            
+            // Delete buttons
+            document.querySelectorAll(`#${entityType}-tbody .delete-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    deleteEntity(entityType, id);
+                });
+            });
+        }
+
+        // View entity details
+        function viewEntity(entityType, id) {
+            fetch(`/dashboard/${entityType}/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(entity => {
+                    const modal = document.getElementById('modal');
+                    const modalTitle = document.getElementById('modal-title');
+                    const modalBody = document.getElementById('modal-form-container');
+                    
+                    modalTitle.textContent = `View ${entityType.slice(0, -1)} Details`;
+                    
+                    let htmlContent = '<div class="entity-details" style="margin-bottom: 20px;">';
+                    
+                    // Generate content based on entity type
+                    for (const key in entity) {
+                        if (entity.hasOwnProperty(key)) {
+                            const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            const value = entity[key] !== null ? entity[key] : 'N/A';
+                            
+                            htmlContent += `
+                                <div class="detail-item" style="margin-bottom: 10px;">
+                                    <strong>${label}:</strong>
+                                    <span>${value}</span>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    htmlContent += '</div>';
+                    modalBody.innerHTML = htmlContent;
+                    
+                    // Hide the save button for view mode
+                    document.getElementById('modal-save').style.display = 'none';
+                    
+                    // Show modal
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error(`Error fetching ${entityType} details:`, error);
+                    showNotification(`Error viewing ${entityType} details`, 'error');
+                });
+        }
+
+        // Edit entity
+        function editEntity(entityType, id) {
+            fetch(`/dashboard/${entityType}/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(entity => {
+                    const modal = document.getElementById('modal');
+                    const modalTitle = document.getElementById('modal-title');
+                    const modalBody = document.getElementById('modal-form-container');
+                    const saveBtn = document.getElementById('modal-save');
+                    
+                    modalTitle.textContent = `Edit ${entityType.slice(0, -1)}`;
+                    
+                    // Generate form HTML based on entity type
+                    let formHTML = `<form id="edit-${entityType}-form">`;
+                    
+                    // Add hidden field for ID
+                    formHTML += `<input type="hidden" name="id" value="${id}">`;
+                    
+                    // Add fields based on entity type
+                    switch(entityType) {
+                        case 'resources':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" value="${entity.quantity}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="unit">Unit</label>
+                                    <input type="text" class="form-control" id="unit" name="unit" value="${entity.unit}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" value="${entity.location}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiry_date">Expiry Date</label>
+                                    <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="${entity.expiry_date ? entity.expiry_date.split('T')[0] : ''}">
+                                </div>
+                            `;
+                            break;
+                        
+                        case 'requests':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="victim_name">Victim Name</label>
+                                    <input type="text" class="form-control" id="victim_name" name="victim_name" value="${entity.victim_name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" value="${entity.quantity}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="priority">Priority</label>
+                                    <select class="form-control" id="priority" name="priority" required>
+                                        <option value="LOW" ${entity.priority === 'LOW' ? 'selected' : ''}>Low</option>
+                                        <option value="MEDIUM" ${entity.priority === 'MEDIUM' ? 'selected' : ''}>Medium</option>
+                                        <option value="HIGH" ${entity.priority === 'HIGH' ? 'selected' : ''}>High</option>
+                                        <option value="CRITICAL" ${entity.priority === 'CRITICAL' ? 'selected' : ''}>Critical</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status" name="status" required>
+                                        <option value="Pending" ${entity.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="Processing" ${entity.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                                        <option value="Completed" ${entity.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" value="${entity.location || ''}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="additional_notes">Additional Notes</label>
+                                    <textarea class="form-control" id="additional_notes" name="additional_notes">${entity.additional_notes || ''}</textarea>
+                                </div>
+                            `;
+                            break;
+                        
+                        case 'vehicles':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="vehicle_type">Vehicle Type</label>
+                                    <select class="form-control" id="vehicle_type" name="vehicle_type" required>
+                                        <option value="ambulance" ${entity.vehicle_type === 'ambulance' ? 'selected' : ''}>Ambulance</option>
+                                        <option value="truck" ${entity.vehicle_type === 'truck' ? 'selected' : ''}>Truck</option>
+                                        <option value="boat" ${entity.vehicle_type === 'boat' ? 'selected' : ''}>Boat</option>
+                                        <option value="helicopter" ${entity.vehicle_type === 'helicopter' ? 'selected' : ''}>Helicopter</option>
+                                        <option value="other" ${entity.vehicle_type === 'other' ? 'selected' : ''}>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="registration_number">Registration Number</label>
+                                    <input type="text" class="form-control" id="registration_number" name="registration_number" value="${entity.registration_number}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="capacity">Capacity</label>
+                                    <input type="number" class="form-control" id="capacity" name="capacity" value="${entity.capacity}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="current_location">Current Location</label>
+                                    <input type="text" class="form-control" id="current_location" name="current_location" value="${entity.current_location || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="veh_status">Status</label>
+                                    <select class="form-control" id="veh_status" name="veh_status" required>
+                                        <option value="available" ${entity.veh_status === 'available' ? 'selected' : ''}>Available</option>
+                                        <option value="in-use" ${entity.veh_status === 'in-use' ? 'selected' : ''}>In Use</option>
+                                        <option value="maintenance" ${entity.veh_status === 'maintenance' ? 'selected' : ''}>Maintenance</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="driver_name">Driver Name</label>
+                                    <input type="text" class="form-control" id="driver_name" name="driver_name" value="${entity.driver_name || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="driver_contact">Driver Contact</label>
+                                    <input type="text" class="form-control" id="driver_contact" name="driver_contact" value="${entity.driver_contact || ''}">
+                                </div>
+                            `;
+                            break;
+                        
+                        case 'volunteers':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="vol_org">Organization</label>
+                                    <input type="text" class="form-control" id="vol_org" name="vol_org" value="${entity.vol_org || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="skills">Skills</label>
+                                    <input type="text" class="form-control" id="skills" name="skills" value="${entity.skills}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="availability">Availability</label>
+                                    <select class="form-control" id="availability" name="availability" required>
+                                        <option value="Full-time" ${entity.availability === 'Full-time' ? 'selected' : ''}>Full-time</option>
+                                        <option value="Part-time" ${entity.availability === 'Part-time' ? 'selected' : ''}>Part-time</option>
+                                        <option value="Weekends only" ${entity.availability === 'Weekends only' ? 'selected' : ''}>Weekends only</option>
+                                        <option value="On-call" ${entity.availability === 'On-call' ? 'selected' : ''}>On-call</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vol_area">Area</label>
+                                    <input type="text" class="form-control" id="vol_area" name="vol_area" value="${entity.vol_area || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status" name="status" required>
+                                        <option value="Active" ${entity.status === 'Active' ? 'selected' : ''}>Active</option>
+                                        <option value="Inactive" ${entity.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                                        <option value="Currently on mission" ${entity.status === 'Currently on mission' ? 'selected' : ''}>Currently on mission</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emg_name">Emergency Contact Name</label>
+                                    <input type="text" class="form-control" id="emg_name" name="emg_name" value="${entity.emg_name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="emg_number">Emergency Contact Number</label>
+                                    <input type="text" class="form-control" id="emg_number" name="emg_number" value="${entity.emg_number}" required>
+                                </div>
+                            `;
+                            break;
+                            
+                        case 'hospitals':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="${entity.name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="capacity">Capacity</label>
+                                    <input type="number" class="form-control" id="capacity" name="capacity" value="${entity.capacity}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="current_occupancy">Current Occupancy</label>
+                                    <input type="number" class="form-control" id="current_occupancy" name="current_occupancy" value="${entity.current_occupancy}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact_person">Contact Person</label>
+                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="${entity.contact_person || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="${entity.phone}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="${entity.email || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" value="${entity.location}" required>
+                                </div>
+                            `;
+                            break;
+                            
+                        case 'organizations':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="organization_name">Name</label>
+                                    <input type="text" class="form-control" id="organization_name" name="organization_name" value="${entity.organization_name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="organization_type">Type</label>
+                                    <select class="form-control" id="organization_type" name="organization_type" required>
+                                        <option value="NGO" ${entity.organization_type === 'NGO' ? 'selected' : ''}>NGO</option>
+                                        <option value="Government Agency" ${entity.organization_type === 'Government Agency' ? 'selected' : ''}>Government Agency</option>
+                                        <option value="International Organization" ${entity.organization_type === 'International Organization' ? 'selected' : ''}>International Organization</option>
+                                        <option value="Medical Relief" ${entity.organization_type === 'Medical Relief' ? 'selected' : ''}>Medical Relief</option>
+                                        <option value="Educational Institution" ${entity.organization_type === 'Educational Institution' ? 'selected' : ''}>Educational Institution</option>
+                                        <option value="Private Company" ${entity.organization_type === 'Private Company' ? 'selected' : ''}>Private Company</option>
+                                        <option value="Other" ${entity.organization_type === 'Other' ? 'selected' : ''}>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact_person">Contact Person</label>
+                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="${entity.contact_person}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cp_email">Email</label>
+                                    <input type="email" class="form-control" id="cp_email" name="cp_email" value="${entity.cp_email}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cp_phone">Phone</label>
+                                    <input type="text" class="form-control" id="cp_phone" name="cp_phone" value="${entity.cp_phone}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="${entity.address}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="website">Website</label>
+                                    <input type="url" class="form-control" id="website" name="website" value="${entity.website || ''}">
+                                </div>
+                            `;
+                            break;
+                            
+                        case 'shelters':
+                            formHTML += `
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="${entity.name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="capacity">Capacity</label>
+                                    <input type="number" class="form-control" id="capacity" name="capacity" value="${entity.capacity}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="current_occupancy">Current Occupancy</label>
+                                    <input type="number" class="form-control" id="current_occupancy" name="current_occupancy" value="${entity.current_occupancy}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact_person">Contact Person</label>
+                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="${entity.contact_person || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="${entity.phone}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="${entity.email || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="${entity.address}" required>
+                                </div>
+                            `;
+                            break;
+                        
+                        default:
+                            formHTML += '<p>Edit form not implemented for this entity type.</p>';
+                    }
+                    
+                    formHTML += '</form>';
+                    modalBody.innerHTML = formHTML;
+                    
+                    // Show save button
+                    saveBtn.style.display = 'block';
+                    saveBtn.onclick = function() {
+                        submitEditForm(entityType, id);
+                    };
+                    
+                    // Show modal
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error(`Error fetching ${entityType} for edit:`, error);
+                    showNotification(`Error preparing edit form`, 'error');
+                });
+        }
+
+        // Submit edit form
+        function submitEditForm(entityType, id) {
+            const form = document.getElementById(`edit-${entityType}-form`);
+            if (!form) return;
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const formData = new FormData(form);
+            const jsonData = {};
+            
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            
+            fetch(`/dashboard/${entityType}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Close modal
+                document.getElementById('modal').style.display = 'none';
+                
+                // Show success notification
+                showNotification(`${entityType.slice(0, -1)} updated successfully`, 'success');
+                
+                // Reload data
+                switch(entityType) {
+                    case 'users': loadUsers(); break;
+                    case 'resources': loadResources(); break;
+                    case 'requests': loadRequests(); break;
+                    case 'donations': loadDonations(); break;
+                    case 'volunteers': loadVolunteers(); break;
+                    case 'vehicles': loadVehicles(); break;
+                    case 'organizations': loadOrganizations(); break;
+                    case 'hospitals': loadHospitals(); break;
+                    case 'shelters': loadShelters(); break;
+                }
+            })
+            .catch(error => {
+                console.error(`Error updating ${entityType}:`, error);
+                showNotification(`Error updating ${entityType.slice(0, -1)}`, 'error');
+            });
+        }
+
+        // Delete entity
+        function deleteEntity(entityType, id) {
+            // Show confirmation modal
+            const confirmModal = document.getElementById('confirm-modal');
+            const confirmMsg = document.getElementById('confirm-message');
+            const confirmBtn = document.getElementById('confirm-action');
+            
+            confirmMsg.textContent = `Are you sure you want to delete this ${entityType.slice(0, -1)}? This action cannot be undone.`;
+            
+            // Set up confirm button
+            confirmBtn.onclick = function() {
+                fetch(`/dashboard/${entityType}/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Close confirmation modal
+                    confirmModal.style.display = 'none';
+                    
+                    // Show success notification
+                    showNotification(`${entityType.slice(0, -1)} deleted successfully`, 'success');
+                    
+                    // Reload data
+                    switch(entityType) {
+                        case 'users': loadUsers(); break;
+                        case 'resources': loadResources(); break;
+                        case 'requests': loadRequests(); break;
+                        case 'donations': loadDonations(); break;
+                        case 'volunteers': loadVolunteers(); break;
+                        case 'vehicles': loadVehicles(); break;
+                        case 'organizations': loadOrganizations(); break;
+                        case 'hospitals': loadHospitals(); break;
+                        case 'shelters': loadShelters(); break;
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error deleting ${entityType}:`, error);
+                    showNotification(`Error deleting ${entityType.slice(0, -1)}`, 'error');
+                    confirmModal.style.display = 'none';
+                });
+            };
+            
+            // Show confirmation modal
+            confirmModal.style.display = 'block';
+        }
+
+        // Show add form
+        function showAddForm(title, entityType) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-form-container');
+            const modalSave = document.getElementById('modal-save');
+            
+            modalTitle.textContent = title;
+            
+            // Generate form based on entity type
+            let formHTML = `<form id="add-${entityType}-form">`;
+            
+            switch(entityType) {
+                case 'resources':
+                    formHTML += `
+                        <div class="form-group">
+                            <label for="resource_id">Resource Type</label>
+                            <select class="form-control" id="resource_id" name="resource_id" required>
+                                <option value="">Select Resource Type</option>
+                                <!-- Will be populated via API -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="unit">Unit</label>
+                            <input type="text" class="form-control" id="unit" name="unit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry_date">Expiry Date</label>
+                            <input type="date" class="form-control" id="expiry_date" name="expiry_date">
+                        </div>
+                    `;
+                    break;
+                
+                // Add more forms for other entity types
+                
+                default:
+                    formHTML += '<p>Add form not implemented for this entity type yet.</p>';
+            }
+            
+            formHTML += '</form>';
+            modalBody.innerHTML = formHTML;
+            
+            // If it's a resources form, populate resource types
+            if (entityType === 'resources') {
+                const resourceSelect = document.getElementById('resource_id');
+                fetch('/resource-types')
+                    .then(response => response.json())
+                    .then(types => {
+                        types.forEach(type => {
+                            const option = document.createElement('option');
+                            option.value = type.resource_id;
+                            option.textContent = type.resource_name;
+                            resourceSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error loading resource types:', error));
+            }
+            
+            // Show save button
+            modalSave.style.display = 'block';
+            modalSave.onclick = function() {
+                submitAddForm(entityType);
+            };
+            
+            // Show modal
+            modal.style.display = 'block';
+        }
+
+        // Submit add form
+        function submitAddForm(entityType) {
+            const form = document.getElementById(`add-${entityType}-form`);
+            if (!form) return;
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const formData = new FormData(form);
+            const jsonData = {};
+            
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            
+            fetch(`/dashboard/${entityType}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Close modal
+                document.getElementById('modal').style.display = 'none';
+                
+                // Show success notification
+                showNotification(`${entityType.slice(0, -1)} added successfully`, 'success');
+                
+                // Reload data
+                switch(entityType) {
+                    case 'users': loadUsers(); break;
+                    case 'resources': loadResources(); break;
+                    case 'requests': loadRequests(); break;
+                    case 'donations': loadDonations(); break;
+                    case 'volunteers': loadVolunteers(); break;
+                    case 'vehicles': loadVehicles(); break;
+                    case 'organizations': loadOrganizations(); break;
+                    case 'hospitals': loadHospitals(); break;
+                    case 'shelters': loadShelters(); break;
+                }
+            })
+            .catch(error => {
+                console.error(`Error adding ${entityType}:`, error);
+                showNotification(`Error adding ${entityType.slice(0, -1)}`, 'error');
+            });
+        }
+
+        // Format date function
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric'
+            });
+        }
+
+        // Show notification message
+        function showNotification(message, type) {
+            const notification = document.querySelector('.notification');
+            notification.textContent = message;
+            notification.className = `notification notification-${type}`;
+            notification.style.display = 'block';
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

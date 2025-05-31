@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Relief Assistance - Sign Up</title>
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e429f;
+            --primary-light: #93c5fd;
+            --secondary: #2563eb;
+            --white: #ffffff;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-800: #1f2937;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--gray-100);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2393c5fd' fill-opacity='0.5' d='M0,160L48,170.7C96,181,192,203,288,213.3C384,224,480,224,576,192C672,160,768,96,864,90.7C960,85,1056,139,1152,160C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            z-index: -1;
+        }
+        
+        .wave-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2393c5fd' fill-opacity='0.3' d='M0,288L48,272C96,256,192,224,288,208C384,192,480,192,576,213.3C672,235,768,277,864,272C960,267,1056,213,1152,181.3C1248,149,1344,139,1392,133.3L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            z-index: -1;
+        }
+        
+        .container {
+            width: 850px;
+            height: 650px;
+            background-color: var(--white);
+            display: flex;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .right-panel {
+            flex: 1;
+            background-color: var(--primary);
+            padding: 40px;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        h1 {
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray-800);
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .login {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .login a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .login a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .right-panel h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .right-panel p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .right-panel ul {
+            list-style-type: none;
+            margin-bottom: 30px;
+            padding-left: 0;
+        }
+        
+        .right-panel ul li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .right-panel ul li:before {
+            content: "✓";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Two column layout for form */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .container {
+                width: 90%;
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .right-panel {
+                display: none;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wave-top"></div>
+    <div class="wave"></div>
+
+    <div class="container">
+
+        <div class="left-panel">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i><svg viewBox="0 0 24 24" fill="currentColor" style="width: 1em; height: 1em;"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3l.71-.71L12 2zm0 13l-4-4h8l-4 4z"></path></svg></i>
+                </div>
+                <div class="logo-text">ReliefConnect</div>
+            </div>
+
+            <h1>Create New Account</h1>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required aria-label="Full Name">
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required aria-label="Sign Up Email">
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required aria-label="Sign Up Password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required aria-label="Confirm Password">
+                </div>
+
+                <button type="submit" class="btn">Create Account</button>
+
+                <div class="login">
+                    Already have an account? <a href="/login" aria-label="Log In">Log In</a>
+                </div>
+            </form>
+        </div> <div class="right-panel">
+            <h2>Join Our Disaster Relief Network</h2>
+            <p>By creating an account, you'll gain access to vital resources and services:</p>
+
+            <ul>
+                <li>Emergency shelter locations and availability</li>
+                <li>Financial assistance programs</li>
+                <li>Medical aid information</li>
+                <li>Volunteer opportunities</li>
+                <li>Real-time disaster updates</li>
+                <li>Resource distribution centers</li>
+            </ul>
+
+            <p>Together, we can strengthen community resilience and respond effectively to crises.</p>
+        </div> </div> <div id="messageBox" class="modal message-modal" style="display: none;">
+        <div class="modal-content message-modal-content">
+            <span class="close message-close" id="closeMessageBox">&times;</span>
+            <p id="messageText"></p>
+            <button id="messageBoxOk" class="btn message-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the custom message box
+        function showMessage(message) {
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageBox.style.display = 'flex'; // Use flex to center vertically/horizontally
+        }
+
+        // Close message box functionality
+        const closeMessageBox = document.getElementById('closeMessageBox');
+        const messageBoxOk = document.getElementById('messageBoxOk');
+        const messageBox = document.getElementById('messageBox');
+
+        closeMessageBox.addEventListener('click', () => {
+            messageBox.style.display = 'none';
+        });
+
+        messageBoxOk.addEventListener('click', () => {
+            messageBox.style.display = 'none';
+        });
+
+        // Close message box if clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === messageBox) {
+                messageBox.style.display = 'none';
+            }
+        });
+
+
+        // Signup form submission logic
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get form values and trim whitespace
+            const fullName = document.getElementById('fullName').value.trim();
+            const signupEmail = document.getElementById('signupEmail').value.trim();
+            const signupPassword = document.getElementById('signupPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // --- Client-Side Validation ---
+
+            // Check if all fields are filled
+            if (!fullName || !signupEmail || !signupPassword || !confirmPassword) {
+                showMessage("All fields are required.");
+                return; // Stop submission
+            }
+
+            // Check if passwords match
+            if (signupPassword !== confirmPassword) {
+                showMessage("Passwords don't match!");
+                return; // Stop submission
+            }
+
+            // --- Asynchronous Submission ---
+            try {
+                // Send data to the /signup endpoint
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Indicate we're sending JSON
+                    },
+                    // Convert the data to a JSON string
+                    body: JSON.stringify({
+                        fullName,     // Use the variable names directly
+                        signupEmail,
+                        signupPassword
+                    }),
+                });
+
+                // Check if the server responded successfully (e.g., status 200-299)
+                if (response.ok) {
+                    showMessage(`Account created successfully for ${fullName}! Please log in.`);
+                    // Optionally clear the form after successful submission
+                    document.getElementById('signupForm').reset();
+                    // Optionally redirect to login page after a short delay or upon clicking OK
+                    // setTimeout(() => { window.location.href = '/login'; }, 2000);
+                } else {
+                    // If the server responded with an error, try to get the error message
+                    const errMsg = await response.text(); // Get error message from response body
+                    showMessage("Signup failed: " + (errMsg || response.statusText)); // Show specific error or generic status
+                }
+            } catch (error) {
+                // Handle network errors or issues with the fetch call itself
+                console.error("Error submitting signup:", error);
+                showMessage("Something went wrong during signup. Please check your connection and try again.");
+            }
+        });
+    </script>
+
+    <style>
+        /* Basic Modal Styling (Adapt to your existing CSS) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            /* Added for centering */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto; /* Auto margin for centering */
+            padding: 30px; /* More padding */
+            border: 1px solid #888;
+            width: 80%; /* Responsive width */
+            max-width: 400px; /* Max width */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative; /* For positioning the close button */
+            text-align: center; /* Center text */
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            position: absolute; /* Position relative to modal-content */
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* OK Button Styling (Adapt to your .btn style) */
+        .message-ok-btn {
+            background-color: #4CAF50; /* Example color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px; /* Space above button */
+        }
+
+        .message-ok-btn:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Ensure message text has some bottom margin */
+        #messageText {
+            margin-bottom: 20px;
+            font-size: 1.1em; /* Slightly larger text */
+        }
+    </style>
+
+</body>
+</html>

@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Relief Assistance Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e429f;
+            --primary-light: #dbeafe;
+            --secondary: #60a5fa;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --success: #059669;
+            --danger: #dc2626;
+            --body-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text: #374151;
+            --border: #d1d5db;
+        }
+
+        .dark-mode {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #1e3a8a;
+            --secondary: #93c5fd;
+            --light: #1f2937;
+            --dark: #f9fafb;
+            --body-bg: #111827;
+            --card-bg: #1f2937;
+            --text: #f9fafb;
+            --border: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .role-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 250px;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .role-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .role-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .role-card p {
+            color: var(--text);
+        }
+
+        h1, h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .back-btn {
+            background-color: var(--light);
+            color: var(--text);
+            border: 1px solid var(--border);
+            margin-right: 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: var(--border);
+        }
+
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: var(--light);
+            border-radius: 15px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode .toggle::after {
+            transform: translateX(30px);
+            background-color: var(--primary);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            grid-column: span 2;
+        }
+
+        .section-title {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .info-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .dark-mode .info-text {
+            color: #9ca3af;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            color: var(--primary-dark);
+        }
+
+        .dark-mode .welcome-section {
+            color: white;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            background-color: #e9f6fd;
+            border-left: 4px solid var(--primary);
+            color: var(--primary-dark);
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .actions {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h2>Disaster Relief Portal</h2>
+        </div>
+        <nav>
+            <a href="/" id="homeLink"><i class="fas fa-home"></i> Home</a>
+            <a href="#" id="statusLink"><i class="fas fa-exchange-alt"></i> Change Status</a>
+            <div class="toggle-container">
+                <div class="toggle" id="darkModeToggle"></div>
+                <span id="modeText">Dark Mode</span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Role Selection Page -->
+        <div id="roleSelectorPage" class="container">
+            <div class="welcome-section">
+                <h1>Welcome to the Disaster Relief Assistance Portal</h1>
+                <p>Please select your role to continue. Your contribution can make a significant difference in disaster relief efforts.</p>
+            </div>
+
+            <div class="role-selector">
+                <div class="role-card" data-form="organizationForm">
+                    <i class="fas fa-building"></i>
+                    <h3>Organization</h3>
+                    <p>Register your organization to collaborate in disaster relief operations</p>
+                </div>
+                <div class="role-card" data-form="donationForm">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h3>Donation</h3>
+                    <p>Donate resources, funds, or supplies to support relief efforts</p>
+                </div>
+                <div class="role-card" data-form="volunteerForm">
+                    <i class="fas fa-user-friends"></i>
+                    <h3>Volunteer</h3>
+                    <p>Offer your time and skills to help those affected by disasters</p>
+                </div>
+                <div class="role-card" data-form="vehicleForm">
+                    <i class="fas fa-truck"></i>
+                    <h3>Vehicle</h3>
+                    <p>Register vehicles for transportation and logistics support</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organization Form -->
+        <div id="organizationForm" class="form-container">
+            <div class="card">
+                <h2>Organization Registration</h2>
+                <p class="info-text">Register your organization to participate in disaster relief operations and coordination.</p>
+                
+                <form id="orgForm">
+                    <div class="form-group">
+                        <label for="org_name">Organization Name*</label>
+                        <input type="text" id="org_name" name="org_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="org_type">Organization Type*</label>
+                        <select id="org_type" name="org_type" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="NGO">NGO</option>
+                            <option value="Government">Government Agency</option>
+                            <option value="International">International Organization</option>
+                            <option value="Medical">Medical Relief</option>
+                            <option value="Educational">Educational Institution</option>
+                            <option value="Private">Private Company</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact_person">Contact Person*</label>
+                        <input type="text" id="contact_person" name="contact_person" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number*</label>
+                        <input type="tel" id="phone_number" name="phone_number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address*</label>
+                        <textarea id="address" name="address" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" name="website" placeholder="https://example.org">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="org_description">Organization Description</label>
+                        <textarea id="org_description" name="org_description" placeholder="Brief description of your organization's mission and expertise"></textarea>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="back-btn" onclick="showRoleSelector()">Back</button>
+                        <button type="reset" class="btn-secondary">Clear Form</button>
+                        <button type="submit">Register Organization</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Donation Form -->
+        <div id="donationForm" class="form-container">
+            <div class="card">
+                <h2>Donation Submission</h2>
+                <p class="info-text">Your contributions can make a significant difference in the lives of those affected by disasters.</p>
+                
+                <form id="donForm">
+                    <div class="form-group">
+                        <label for="donor_name">Donor Name*</label>
+                        <input type="text" id="donor_name" name="donor_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donor_email">Donor Email</label>
+                        <input type="email" id="donor_email" name="donor_email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donor_phone">Donor Phone</label>
+                        <input type="tel" id="donor_phone" name="donor_phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donar_org">Donor Organization</label>
+                        <input type="text" id="donor_org" name="donor_org">
+                        <p class="info-text">Select the organization you're donating to (if applicable)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resource_id">Resource Type</label>
+                        <select id="resource_id" name="resource_id">
+                            <option value="">-- Select Resource --</option>
+                            <option value="1">Water</option>
+                            <option value="2">Food</option>
+                            <option value="3">Medicine</option>
+                            <option value="4">Clothing</option>
+                            <option value="5">Shelter</option>
+                            <option value="6">First Aid Kit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donation_type">Donation Type*</label>
+                        <select id="donation_type" name="donation_type" required>
+                            <option value="">-- Select Resource --</option>
+                            <option value="1">Water</option>
+                            <option value="2">Food</option>
+                            <option value="3">Medicine</option>
+                            <option value="4">Clothing</option>
+                            <option value="5">Shelter</option>
+                            <option value="6">First Aid Kit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="amountGroup">
+                        <label for="amount">Amount ($)</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0">
+                        <p class="info-text">For monetary donations</p>
+                    </div>
+
+                    <div class="form-group" id="quantityGroup">
+                        <label for="quantity">Quantity*</label>
+                        <input type="number" id="quantity" name="quantity" min="0" required>
+                        <p class="info-text">For non-monetary donations</p>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Please describe your donation in detail"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donation_status">Status*</label>
+                        <select id="donation_status" name="status" required>
+                            <option value="received">Sent</option>
+                            <option value="processed">Processed</option>
+                        </select>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="back-btn" onclick="showRoleSelector()">Back</button>
+                        <button type="reset" class="btn-secondary">Clear Form</button>
+                        <button type="submit">Submit Donation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Volunteer Form -->
+        <div id="volunteerForm" class="form-container">
+            <div class="card">
+                <h2>Volunteer Registration</h2>
+                <p class="info-text">Join our network of volunteers to help those affected by disasters. Your skills and time can make a significant difference.</p>
+                
+                <form id="volForm">
+                    <div class="form-group">
+                        <label for="vol_email">Email*</label>
+                        <input type="email" id="vol_email" name="email" required>
+                        <p class="info-text">Your Email ID from the main system, If new signup first</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vol_org_id">Organization</label>
+                        <input type="text" id="vol_org_id" name="vol_org_id">
+                        <p class="info-text">Select the organization you're affiliated with (if any)</p>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="skills">Skills & Expertise*</label>
+                        <textarea id="skills" name="skills" placeholder="List your skills relevant to disaster relief (medical, logistics, languages, etc.)" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="availability">Availability*</label>
+                        <select id="availability" name="availability" required>
+                            <option value="">-- Select Availability --</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Weekends only">Weekends only</option>
+                            <option value="On-call">On-call</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area_of_operation">Area of Operation</label>
+                        <input type="text" id="area_of_operation" name="area_of_operation" placeholder="City, region, or country">
+                        <p class="info-text">Where you're available to volunteer</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vol_status">Status*</label>
+                        <select id="vol_status" name="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Currently on mission">Currently on Mission</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <h3 class="section-title">Emergency Contact Information</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emergency_name">Emergency Contact Name*</label>
+                        <input type="text" id="emergency_name" name="emergency_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emergency_phone">Emergency Contact Phone*</label>
+                        <input type="tel" id="emergency_phone" name="emergency_phone" required>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="back-btn" onclick="showRoleSelector()">Back</button>
+                        <button type="reset" class="btn-secondary">Clear Form</button>
+                        <button type="submit">Register as Volunteer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Vehicle Form -->
+        <div id="vehicleForm" class="form-container">
+            <div class="card">
+                <h2>Vehicle Registration</h2>
+                <p class="info-text">Register vehicles for transportation and logistics support in disaster relief operations.</p>
+                
+                <form id="vehForm">
+                    <div class="form-group">
+                        <label for="veh_email">Email*</label>
+                        <input type="email" id="veh_email" name="email" required>
+                        <p class="info-text">Your Email ID from the main system, If new signup first</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vehicle_type">Vehicle Type*</label>
+                        <select id="vehicle_type" name="vehicle_type" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="ambulance">Ambulance</option>
+                            <option value="truck">Truck</option>
+                            <option value="boat">Boat</option>
+                            <option value="helicopter">Helicopter</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registration_number">Registration Number*</label>
+                        <input type="text" id="registration_number" name="registration_number" required>
+                        <p class="info-text">Vehicle's official registration number</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacity">Capacity (persons/tons)*</label>
+                        <input type="number" id="capacity" name="capacity" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="veh_org_id">Organization</label>
+                        <input type="text" name="veh_org_id" id="veh_org_id">
+                        <p class="info-text">Organization that owns or operates this vehicle</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="current_location">Current Location</label>
+                        <input type="text" id="current_location" name="current_location">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="veh_status">Status*</label>
+                        <select id="veh_status" name="veh_status" required>
+                            <option value="available">Available</option>
+                            <option value="in-use">In Use</option>
+                            <option value="maintenance">Under Maintenance</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="vehicle_specifications">Vehicle Specifications</label>
+                        <textarea id="vehicle_specifications" name="vehicle_specifications" placeholder="Enter detailed specifications like fuel type, model, year, special equipment, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="driver_name">Driver Name</label>
+                        <input type="text" id="driver_name" name="driver_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="driver_contact">Driver Contact</label>
+                        <input type="tel" id="driver_contact" name="driver_contact">
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="back-btn" onclick="showRoleSelector()">Back</button>
+                        <button type="reset" class="btn-secondary">Clear Form</button>
+                        <button type="submit">Register Vehicle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Status Check Form -->
+        <div id="statusCheckForm" class="form-container">
+            <div class="card">
+                <h2>Check/Change Status</h2>
+                <p class="info-text">Enter your email to check or update your volunteer and vehicle registrations.</p>
+                
+                <form id="checkStatusForm">
+                    <div class="form-group">
+                        <label for="status_email">Email*</label>
+                        <input type="email" id="status_email" name="email" required>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="back-btn" onclick="showRoleSelector()">Back</button>
+                        <button type="submit">Check Status</button>
+                    </div>
+                </form>
+                
+                <div id="statusResults" style="display: none;">
+                    <h3>Your Volunteer Registrations</h3>
+                    <div id="volunteerResults">
+                        <table id="volunteerTable" class="status-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Availability</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="volunteerTableBody">
+                                <!-- Volunteer records will be inserted here -->
+                            </tbody>
+                        </table>
+                        <p id="noVolunteers" style="display: none;">No volunteer registrations found.</p>
+                    </div>
+                    
+                    <h3>Your Vehicle Registrations</h3>
+                    <div id="vehicleResults">
+                        <table id="vehicleTable" class="status-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Registration Number</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vehicleTableBody">
+                                <!-- Vehicle records will be inserted here -->
+                            </tbody>
+                        </table>
+                        <p id="noVehicles" style="display: none;">No vehicle registrations found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Edit Volunteer Modal -->
+        <div id="editVolunteerModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" id="closeVolModal">&times;</span>
+                <h3>Edit Volunteer Status</h3>
+                <form id="editVolunteerForm">
+                    <input type="hidden" id="edit_volunteer_id" name="volunteer_id">
+                    
+                    <div class="form-group">
+                        <label for="edit_availability">Availability</label>
+                        <select id="edit_availability" name="availability" required>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Weekends only">Weekends only</option>
+                            <option value="On-call">On-call</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_vol_status">Status</label>
+                        <select id="edit_vol_status" name="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Currently on mission">Currently on Mission</option>
+                        </select>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Edit Vehicle Modal -->
+        <div id="editVehicleModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" id="closeVehModal">&times;</span>
+                <h3>Edit Vehicle Status</h3>
+                <form id="editVehicleForm">
+                    <input type="hidden" id="edit_vehicle_id" name="vehicle_id">
+                    
+                    <div class="form-group">
+                        <label for="edit_veh_status">Status</label>
+                        <select id="edit_veh_status" name="status" required>
+                            <option value="available">Available</option>
+                            <option value="in-use">In Use</option>
+                            <option value="maintenance">Under Maintenance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Disaster Relief Assistance Portal. All rights reserved.</p>
+    </footer>
+
+<script>
+    // DOM Elements and Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Role selector functionality
+        const roleCards = document.querySelectorAll('.role-card');
+        roleCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const formId = this.getAttribute('data-form');
+                showForm(formId);
+            });
+        });
+    
+        // Form submission handlers
+        if (document.getElementById('orgForm')) {
+            document.getElementById('orgForm').addEventListener('submit', handleOrganizationSubmit);
+        }
+        
+        if (document.getElementById('donForm')) {
+            document.getElementById('donForm').addEventListener('submit', handleDonationSubmit);
+        }
+        
+        if (document.getElementById('volForm')) {
+            document.getElementById('volForm').addEventListener('submit', handleVolunteerSubmit);
+        }
+        
+        if (document.getElementById('vehForm')) {
+            document.getElementById('vehForm').addEventListener('submit', handleVehicleSubmit);
+        }
+        
+        if (document.getElementById('checkStatusForm')) {
+            document.getElementById('checkStatusForm').addEventListener('submit', handleStatusCheck);
+        }
+        
+        if (document.getElementById('editVolunteerForm')) {
+            document.getElementById('editVolunteerForm').addEventListener('submit', handleVolunteerUpdate);
+        }
+        
+        if (document.getElementById('editVehicleForm')) {
+            document.getElementById('editVehicleForm').addEventListener('submit', handleVehicleUpdate);
+        }
+    
+        // Status link in the header
+        if (document.getElementById('statusLink')) {
+            document.getElementById('statusLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                showForm('statusCheckForm');
+            });
+        }
+    
+        // Modal close buttons
+        if (document.getElementById('closeVolModal')) {
+            document.getElementById('closeVolModal').addEventListener('click', function() {
+                document.getElementById('editVolunteerModal').style.display = 'none';
+            });
+        }
+        
+        if (document.getElementById('closeVehModal')) {
+            document.getElementById('closeVehModal').addEventListener('click', function() {
+                document.getElementById('editVehicleModal').style.display = 'none';
+            });
+        }
+    
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            const modeText = document.getElementById('modeText');
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    modeText.textContent = 'Light Mode';
+                } else {
+                    modeText.textContent = 'Dark Mode';
+                }
+            });
+        }
+    });
+    
+    // Show the selected form and hide others
+    function showForm(formId) {
+        // Hide all forms
+        document.querySelectorAll('.form-container, #roleSelectorPage').forEach(container => {
+            container.style.display = 'none';
+        });
+        
+        // Show the selected form
+        document.getElementById(formId).style.display = 'block';
+    }
+    
+    // Return to role selector
+    function showRoleSelector() {
+        document.querySelectorAll('.form-container').forEach(container => {
+            container.style.display = 'none';
+        });
+        document.getElementById('roleSelectorPage').style.display = 'block';
+    }
+    
+    // Database connection URL - FIXED: removed trailing slash
+    const DB_URL = 'http://localhost:3000';
+
+    // Organization form submission - FIXED: Field names properly matched to server expectations
+    function handleOrganizationSubmit(e) {
+        e.preventDefault();
+        
+        // Get form values and validate them first
+        const orgName = document.getElementById('org_name').value.trim();
+        const orgType = document.getElementById('org_type').value.trim();
+        const contactPerson = document.getElementById('contact_person').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone_number').value.trim();
+        const address = document.getElementById('address').value.trim();
+        
+        // Check all required fields
+        if (!orgName || !orgType || !contactPerson || !email || !phone || !address) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        // Create the data object with field names that match server expectations
+        const formData = {
+            organization_name: orgName,
+            organization_type: orgType,
+            contact_person: contactPerson,
+            cp_email: email,
+            cp_phone: phone,
+            address: address,
+            website: document.getElementById('website').value.trim(),
+            organization_description: document.getElementById('org_description').value.trim()
+        };
+        
+        // Disable the submit button to prevent multiple submissions
+        const submitButton = document.querySelector('#orgForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+        
+        fetch(`${DB_URL}/organizations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            // Re-enable the submit button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Register Organization';
+            
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'An error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Organization registered successfully!');
+            e.target.reset();
+            showRoleSelector();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'Failed to register organization. Please try again.');
+        });
+    }
+    
+    // Donation form submission - FIXED: Field names properly matched to server expectations
+    function handleDonationSubmit(e) {
+        e.preventDefault();
+        
+        // Check for required fields before submission
+        const donorName = document.getElementById('donor_name').value.trim();
+        const donationType = document.getElementById('donation_type').value.trim();
+        
+        if (!donorName || !donationType) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        const formData = {
+            donar_name: donorName, // Note: Server expects "donar_name" not "donor_name"
+            donar_email: document.getElementById('donor_email').value.trim(),
+            donar_phone: document.getElementById('donor_phone').value.trim(),
+            donar_organization_name: document.getElementById('donor_org').value.trim(),
+            resource_id: document.getElementById('resource_id').value,
+            donation_type: donationType,
+            donation_amount: document.getElementById('amount').value || 0,
+            donation_type_qty: document.getElementById('quantity').value || 0,
+            description: document.getElementById('description').value.trim(),
+            status: document.getElementById('donation_status').value
+        };
+        
+        // Disable submit button
+        const submitButton = document.querySelector('#donForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+        
+        fetch(`${DB_URL}/donations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            // Re-enable the submit button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Donation';
+            
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'An error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Donation submitted successfully!');
+            e.target.reset();
+            showRoleSelector();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'Failed to submit donation. Please try again.');
+        });
+    }
+    
+    // Volunteer form submission
+    function handleVolunteerSubmit(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('vol_email').value.trim();
+        
+        if (!email) {
+            alert('Email is required');
+            return;
+        }
+        
+        // Disable submit button
+        const submitButton = document.querySelector('#volForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Checking...';
+        
+        // First check if user exists in the users table
+        fetch(`${DB_URL}/users/check?email=${encodeURIComponent(email)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error checking user status');
+                }
+                return response.json();
+            })
+            .then(userData => {
+                if (!userData || !userData.user_id) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Register as Volunteer';
+                    alert('This email is not registered in our system. Please register as a user first.');
+                    return;
+                }
+                
+                // Validate required fields
+                const skills = document.getElementById('skills').value.trim();
+                const availability = document.getElementById('availability').value;
+                const status = document.getElementById('vol_status').value;
+                const emgName = document.getElementById('emergency_name').value.trim();
+                const emgPhone = document.getElementById('emergency_phone').value.trim();
+                
+                if (!skills || !availability || !status || !emgName || !emgPhone) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Register as Volunteer';
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // If user exists, proceed with volunteer registration
+                const formData = {
+                    user_id: userData.user_id,
+                    vol_org: document.getElementById('vol_org_id').value.trim(),
+                    skills: skills,
+                    availability: availability,
+                    vol_area: document.getElementById('area_of_operation').value.trim(),
+                    status: status,
+                    emg_name: emgName,
+                    emg_number: emgPhone
+                };
+                
+                submitButton.textContent = 'Submitting...';
+                
+                fetch(`${DB_URL}/volunteers`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Register as Volunteer';
+                    
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'An error occurred');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Volunteer registered successfully!');
+                    e.target.reset();
+                    showRoleSelector();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message || 'Failed to register volunteer. Please try again.');
+                });
+            })
+            .catch(error => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Register as Volunteer';
+                console.error('Error checking user:', error);
+                alert(error.message || 'Error checking user status. Please try again.');
+            });
+    }
+    
+    // Vehicle form submission - FIXED: correct field name for veh_status
+    function handleVehicleSubmit(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('veh_email').value.trim();
+    
+    if (!email) {
+        alert('Email is required');
+        return;
+    }
+    
+    // Disable submit button
+    const submitButton = document.querySelector('#vehForm button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Checking...';
+    
+    // First check if user exists in the users table
+    fetch(`${DB_URL}/users/check?email=${encodeURIComponent(email)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error checking user status');
+            }
+            return response.json();
+        })
+        .then(userData => {
+            if (!userData || !userData.user_id) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Register Vehicle';
+                alert('This email is not registered in our system. Please register as a user first.');
+                return;
+            }
+            
+            // Validate required fields
+            const vehicleType = document.getElementById('vehicle_type').value;
+            const registrationNumber = document.getElementById('registration_number').value.trim();
+            const capacity = document.getElementById('capacity').value;
+            const status = document.getElementById('veh_status').value;
+            
+            if (!vehicleType || !registrationNumber || !capacity || !status) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Register Vehicle';
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // If user exists, proceed with vehicle registration
+            const formData = {
+                user_id: userData.user_id,
+                vehicle_type: vehicleType,
+                registration_number: registrationNumber,
+                capacity: parseInt(capacity),  // Ensure this is a number
+                veh_org_id: null,  // Set to null by default
+                current_location: document.getElementById('current_location').value.trim(),
+                veh_status: status,
+                vehicle_specifications: document.getElementById('vehicle_specifications').value.trim(),
+                driver_name: document.getElementById('driver_name').value.trim(),
+                driver_contact: document.getElementById('driver_contact').value.trim()
+            };
+            
+            // Only add veh_org_id if it has a value
+            const orgId = document.getElementById('veh_org_id').value.trim();
+            if (orgId) {
+                formData.veh_org_id = orgId;
+            }
+            
+            console.log('Sending vehicle data:', formData);
+            submitButton.textContent = 'Submitting...';
+            
+            fetch(`${DB_URL}/vehicles`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // Parse the JSON response regardless of status
+                return response.json().then(data => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Register Vehicle';
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'An error occurred');
+                    }
+                    
+                    return data;
+                });
+            })
+            .then(data => {
+                console.log('Success:', data);
+                alert('Vehicle registered successfully!');
+                e.target.reset();
+                showRoleSelector();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'Failed to register vehicle. Please try again.');
+            });
+        })
+        .catch(error => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Register Vehicle';
+            console.error('Error checking user:', error);
+            alert(error.message || 'Error checking user status. Please try again.');
+        });
+}
+    
+    // Status check functionality
+    function handleStatusCheck(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('status_email').value.trim();
+        
+        if (!email) {
+            alert('Email is required');
+            return;
+        }
+        
+        // Show loading state
+        const submitButton = document.querySelector('#checkStatusForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Checking...';
+        
+        document.getElementById('statusResults').style.display = 'block';
+        document.getElementById('volunteerTable').style.display = 'none';
+        document.getElementById('vehicleTable').style.display = 'none';
+        document.getElementById('noVolunteers').style.display = 'none';
+        document.getElementById('noVehicles').style.display = 'none';
+        
+        // Check if user exists first
+        fetch(`${DB_URL}/users/check?email=${encodeURIComponent(email)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error checking user status');
+                }
+                return response.json();
+            })
+            .then(userData => {
+                if (!userData || !userData.user_id) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Check Status';
+                    
+                    alert('Email not registered in our system. Please register first.');
+                    document.getElementById('volunteerTable').style.display = 'none';
+                    document.getElementById('vehicleTable').style.display = 'none';
+                    document.getElementById('noVolunteers').style.display = 'block';
+                    document.getElementById('noVehicles').style.display = 'block';
+                    document.getElementById('noVolunteers').textContent = 'Email not registered in our system.';
+                    document.getElementById('noVehicles').textContent = 'Email not registered in our system.';
+                    return;
+                }
+                
+                const userId = userData.user_id;
+                
+                // Fetch volunteer data for this user
+                fetch(`${DB_URL}/volunteers/user/${userId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch volunteer data');
+                        }
+                        return response.json();
+                    })
+                    .then(volunteers => {
+                        const volunteerTable = document.getElementById('volunteerTableBody');
+                        volunteerTable.innerHTML = '';
+                        
+                        if (volunteers && volunteers.length > 0) {
+                            volunteers.forEach(vol => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${vol.volunteer_id}</td>
+                                    <td>${vol.emg_name || ''}</td>
+                                    <td>${vol.availability}</td>
+                                    <td>${vol.status}</td>
+                                    <td>
+                                        <button onclick="editVolunteer(${vol.volunteer_id}, '${vol.availability}', '${vol.status}')">Edit</button>
+                                        <button onclick="deleteVolunteer(${vol.volunteer_id})">Delete</button>
+                                    </td>
+                                `;
+                                volunteerTable.appendChild(row);
+                            });
+                            document.getElementById('volunteerTable').style.display = 'table';
+                            document.getElementById('noVolunteers').style.display = 'none';
+                        } else {
+                            document.getElementById('volunteerTable').style.display = 'none';
+                            document.getElementById('noVolunteers').style.display = 'block';
+                            document.getElementById('noVolunteers').textContent = 'No volunteer registrations found.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching volunteers:', error);
+                        document.getElementById('volunteerTable').style.display = 'none';
+                        document.getElementById('noVolunteers').style.display = 'block';
+                        document.getElementById('noVolunteers').textContent = 'Error fetching volunteer data.';
+                    });
+                
+                // Fetch vehicle data for this user
+                fetch(`${DB_URL}/vehicles/user/${userId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch vehicle data');
+                        }
+                        return response.json();
+                    })
+                    .then(vehicles => {
+                        const vehicleTable = document.getElementById('vehicleTableBody');
+                        vehicleTable.innerHTML = '';
+                        
+                        if (vehicles && vehicles.length > 0) {
+                            vehicles.forEach(veh => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${veh.vehicle_id}</td>
+                                    <td>${veh.registration_number}</td>
+                                    <td>${veh.veh_status}</td>
+                                    <td>
+                                        <button onclick="editVehicle(${veh.vehicle_id}, '${veh.veh_status}')">Edit</button>
+                                        <button onclick="deleteVehicle(${veh.vehicle_id})">Delete</button>
+                                    </td>
+                                `;
+                                vehicleTable.appendChild(row);
+                            });
+                            document.getElementById('vehicleTable').style.display = 'table';
+                            document.getElementById('noVehicles').style.display = 'none';
+                        } else {
+                            document.getElementById('vehicleTable').style.display = 'none';
+                            document.getElementById('noVehicles').style.display = 'block';
+                            document.getElementById('noVehicles').textContent = 'No vehicle registrations found.';
+                        }
+                        
+                        // Re-enable the submit button
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Check Status';
+                    })
+                    .catch(error => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Check Status';
+                        console.error('Error fetching vehicles:', error);
+                        document.getElementById('vehicleTable').style.display = 'none';
+                        document.getElementById('noVehicles').style.display = 'block';
+                        document.getElementById('noVehicles').textContent = 'Error fetching vehicle data.';
+                    });
+            })
+            .catch(error => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Check Status';
+                console.error('Error checking user:', error);
+                alert('Error checking user status. Please try again.');
+            });
+    }
+    
+    // Edit volunteer record
+    function editVolunteer(id, availability, status) {
+        document.getElementById('edit_volunteer_id').value = id;
+        document.getElementById('edit_availability').value = availability;
+        document.getElementById('edit_vol_status').value = status;
+        
+        document.getElementById('editVolunteerModal').style.display = 'block';
+    }
+    
+    // Delete volunteer record
+    function deleteVolunteer(id) {
+        if (confirm('Are you sure you want to delete this volunteer record?')) {
+            fetch(`${DB_URL}/volunteers/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Volunteer record deleted successfully!');
+                // Refresh the status check results
+                document.getElementById('checkStatusForm').dispatchEvent(new Event('submit'));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete volunteer record. Please try again.');
+            });
+        }
+    }
+    
+    // Update volunteer record
+    function handleVolunteerUpdate(e) {
+        e.preventDefault();
+        
+        const id = document.getElementById('edit_volunteer_id').value;
+        const availability = document.getElementById('edit_availability').value;
+        const status = document.getElementById('edit_vol_status').value;
+        
+        if (!availability || !status) {
+            alert('Please fill all required fields');
+            return;
+        }
+        
+        // Disable the submit button
+        const submitButton = document.querySelector('#editVolunteerForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Updating...';
+        
+        fetch(`${DB_URL}/volunteers/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ availability, status })
+        })
+        .then(response => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Update';
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('editVolunteerModal').style.display = 'none';
+            alert('Volunteer record updated successfully!');
+            // Refresh the status check results
+            document.getElementById('checkStatusForm').dispatchEvent(new Event('submit'));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update volunteer record. Please try again.');
+        });
+    }
+    
+    // Edit vehicle record
+    function editVehicle(id, status) {
+        document.getElementById('edit_vehicle_id').value = id;
+        document.getElementById('edit_veh_status').value = status;
+        
+        document.getElementById('editVehicleModal').style.display = 'block';
+    }
+    
+    // Delete vehicle record
+    function deleteVehicle(id) {
+        if (confirm('Are you sure you want to delete this vehicle record?')) {
+            fetch(`${DB_URL}/vehicles/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Vehicle record deleted successfully!');
+                // Refresh the status check results
+                document.getElementById('checkStatusForm').dispatchEvent(new Event('submit'));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete vehicle record. Please try again.');
+            });
+        }
+    }
+    
+    // Update vehicle record
+    function handleVehicleUpdate(e) {
+        e.preventDefault();
+        
+        const id = document.getElementById('edit_vehicle_id').value;
+        const status = document.getElementById('edit_veh_status').value;
+        
+        if (!status) {
+            alert('Status is required');
+            return;
+        }
+        
+        // Disable the submit button
+        const submitButton = document.querySelector('#editVehicleForm button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Updating...';
+        
+        fetch(`${DB_URL}/vehicles/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ veh_status: status })
+        })
+        .then(response => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Update';
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('editVehicleModal').style.display = 'none';
+            alert('Vehicle record updated successfully!');
+            // Refresh the status check results
+            document.getElementById('checkStatusForm').dispatchEvent(new Event('submit'));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update vehicle record. Please try again.');
+        });
+    }
+</script>
+</body>
+</html>

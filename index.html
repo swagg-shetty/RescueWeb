@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Relief Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+<style>
+        :root {
+            --primary: #2b6cb0;
+            --primary-light: #3182ce;
+            --secondary: #e53e3e;
+            --secondary-light: #f56565;
+            --text-dark: #2d3748;
+            --text-light: #4a5568;
+            --bg-light: #f7fafc;
+            --bg-white: #ffffff;
+            --bg-gray: #edf2f7;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+       
+        .dark-mode {
+            --primary: #4299e1;
+            --primary-light: #63b3ed;
+            --secondary: #f56565;
+            --secondary-light: #fc8181;
+            --text-dark: #f7fafc;
+            --text-light: #e2e8f0;
+            --bg-light: #1a202c;
+            --bg-white: #2d3748;
+            --bg-gray: #4a5568;
+            --border-color: #4a5568;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Fix for dark mode footer text */
+        .dark-mode footer {
+            background-color: #1a202c;
+        }
+        
+        .dark-mode .footer-description,
+        .dark-mode .footer-links a,
+        .dark-mode .footer-bottom p {
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .footer-links a:hover {
+            color: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+       
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+       
+        /* Navigation */
+        nav {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+       
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+       
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+       
+        .logo img {
+            margin-right: 0.5rem;
+            height: 32px;
+        }
+       
+        .nav-links {
+            display: flex;
+            list-style-type: none;
+        }
+       
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+       
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+       
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+       
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+       
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--bg-gray);
+            transition: all 0.3s ease;
+        }
+       
+        .dark-mode-toggle:hover {
+            background-color: var(--border-color);
+        }
+       
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+       
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(43, 108, 176, 0.9), rgba(43, 108, 176, 0.7)), url('/api/placeholder/1200/600');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+        }
+       
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+       
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+       
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+       
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+       
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+       
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+       
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+       
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+       
+        .btn-secondary:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+       
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+       
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+       
+        /* Sections */
+        section {
+            padding: 4rem 1rem;
+        }
+       
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+       
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+       
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+       
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+       
+        /* Alerts Section */
+        .alerts-section {
+            background-color: var(--bg-white);
+        }
+       
+        .alerts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+       
+        .alert-card {
+            background-color: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            transition: transform 0.2s;
+        }
+       
+        .alert-card:hover {
+            transform: translateY(-5px);
+        }
+       
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+       
+        .alert-type {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+       
+        .alert-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+       
+        .alert-location {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+       
+        .alert-message {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+       
+        .alert-action {
+            text-align: right;
+        }
+       
+        .alert-action a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.25rem;
+        }
+
+        /* Disaster Type Section */
+        .disaster-type-section {
+            background-color: var(--bg-gray);
+        }
+       
+        .disaster-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+       
+        .disaster-type-card {
+            background-color: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+       
+        .disaster-type-card:hover {
+            transform: translateY(-5px);
+        }
+       
+        .disaster-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+       
+        .disaster-type-card h3 {
+            margin-bottom: 0.5rem;
+        }
+       
+        .disaster-type-card p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+       
+        /* Map Section */
+        .map-section {
+            background-color: var(--bg-white);
+        }
+       
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+       
+        @media (min-width: 768px) {
+            .map-container {
+                flex-direction: row;
+            }
+        }
+       
+        .map-box {
+            flex: 1;
+            height: 400px;
+            background-color: var(--bg-gray);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+       
+        .map-info {
+            flex: 1;
+        }
+       
+        .relief-centers {
+            list-style-type: none;
+        }
+       
+        .relief-center {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+       
+        .relief-center-icon {
+            background-color: var(--primary-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+       
+        .relief-center-info h4 {
+            margin-bottom: 0.25rem;
+        }
+       
+        .relief-center-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+       
+        .relief-center-distance {
+            margin-left: auto;
+            text-align: right;
+            color: var(--primary);
+            font-weight: 600;
+        }
+       
+        /* Stats Section */
+        .stats-section {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+       
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+       
+        .stat-item {
+            padding: 1.5rem;
+        }
+       
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+       
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Login/Signup Section */
+        .login-section {
+            background-color: var(--bg-gray);
+            padding: 4rem 1rem;
+        }
+
+        .login-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .login-card {
+            background-color: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .login-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .login-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+       
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 3rem 1rem;
+        }
+       
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+       
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+       
+        .footer-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+       
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+       
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+       
+        .social-icon:hover {
+            background-color: var(--primary);
+        }
+       
+        .footer-links h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+       
+        .footer-links ul {
+            list-style-type: none;
+        }
+       
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+       
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+       
+        .footer-links a:hover {
+            color: white;
+        }
+       
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+       
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+           
+            .mobile-menu-btn {
+                display: block;
+            }
+           
+            .hero h1 {
+                font-size: 2rem;
+            }
+           
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span> &#128680; </span>
+                <span>Disaster Relief Assistance</span>
+            </div>
+            <div class="nav-controls">
+                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/requesthelp">Request Help</a></li>
+                    <li><a href="/volunteer">Volunteer</a></li>
+                    <li><a href="/reliefcenters">Relief Centers</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li id="authLink"><a href="/login">Login/Signup</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Emergency Relief When You Need It Most</h1>
+            <p>Find shelter, food, medical aid, and more. Our database connects those affected by disasters with immediate assistance services.</p>
+            <div class="cta-buttons">
+                <a href="/requesthelp" class="btn btn-secondary">Find Help</a>
+                <a href="/volunteer" class="btn btn-outline">Volunteer Now</a>
+                <a href="/volunteer#donationForm" class="btn btn-outline">Donate Resources</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="alerts-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Current Disaster Alerts</h2>
+                <p>Stay informed with real-time updates and emergency alerts in your area.</p>
+            </div>
+            <div class="alerts-container">
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type">Flood Warning</span>
+                        <span class="alert-date">April 22, 2025</span>
+                    </div>
+                    <h3 class="alert-location">Riverside County, CA</h3>
+                    <p class="alert-message">Heavy rainfall has caused river levels to rise. Evacuation recommended for low-lying areas near the river.</p>
+                    <div class="alert-action">
+                        <a href="#">View Details →</a>
+                    </div>
+                </div>
+
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type">Wildfire</span>
+                        <span class="alert-date">April 23, 2025</span>
+                    </div>
+                    <h3 class="alert-location">Sierra Mountains, CA</h3>
+                    <p class="alert-message">Wildfire spreading rapidly due to strong winds. Mandatory evacuation ordered for affected communities.</p>
+                    <div class="alert-action">
+                        <a href="#">View Details →</a>
+                    </div>
+                </div>
+
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type">Hurricane Watch</span>
+                        <span class="alert-date">April 24, 2025</span>
+                    </div>
+                    <h3 class="alert-location">Gulf Coast</h3>
+                    <p class="alert-message">Hurricane Elena forming in the Atlantic. Expected to make landfall within 72 hours. Prepare emergency supplies.</p>
+                    <div class="alert-action">
+                        <a href="#">View Details →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="disaster-type-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Disaster Types We Respond To</h2>
+                <p>Our database and response teams are prepared to handle various types of disasters.</p>
+            </div>
+            <div class="disaster-types">
+                <div class="disaster-type-card">
+                    <div class="disaster-icon">🌊</div>
+                    <h3>Flood</h3>
+                    <p>Response to rising water levels affecting communities</p>
+                    <p><strong>Severity Level:</strong> High</p>
+                </div>
+
+                <div class="disaster-type-card">
+                    <div class="disaster-icon">🔥</div>
+                    <h3>Wildfire</h3>
+                    <p>Emergency response to uncontrolled fires threatening populated areas</p>
+                    <p><strong>Severity Level:</strong> Critical</p>
+                </div>
+
+                <div class="disaster-type-card">
+                    <div class="disaster-icon">🌪️</div>
+                    <h3>Hurricane</h3>
+                    <p>Preparation and response for tropical storms and hurricanes</p>
+                    <p><strong>Severity Level:</strong> Critical</p>
+                </div>
+
+                <div class="disaster-type-card">
+                    <div class="disaster-icon">⚡</div>
+                    <h3>Earthquake</h3>
+                    <p>Immediate response and recovery assistance after seismic activity</p>
+                    <p><strong>Severity Level:</strong> High</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Relief Centers Near You</h2>
+                <p>Find nearby emergency shelters, hospitals, food distribution centers, and medical aid stations.</p>
+            </div>
+            <div class="map-container">
+                <div class="map-box" id="map"></div>
+                <div class="map-info">
+                    <h3>Featured Relief Centers</h3>
+                    <ul class="relief-centers">
+                        <li class="relief-center">
+                            <div class="relief-center-icon">🏥</div>
+                            <div class="relief-center-info">
+                                <h4>Central Medical Hospital</h4>
+                                <p>123 Main St, Cityville</p>
+                                <p>Capacity: 200 beds | Current Occupancy: 145</p>
+                            </div>
+                            <div class="relief-center-distance">1.2 mi</div>
+                        </li>
+                        <li class="relief-center">
+                            <div class="relief-center-icon">🏫</div>
+                            <div class="relief-center-info">
+                                <h4>Red Cross Organization Center</h4>
+                                <p>456 Park Ave, Cityville</p>
+                                <p>Services: Shelter, Food, Water</p>
+                            </div>
+                            <div class="relief-center-distance">2.5 mi</div>
+                        </li>
+                    </ul>
+                    <a href="/reliefcenters" class="btn btn-primary" style="margin-top: 1rem;">View All Centers</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">15,000+</div>
+                    <div class="stat-label">Victims Assisted</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4,300+</div>
+                    <div class="stat-label">Active Volunteers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">86</div>
+                    <div class="stat-label">Partner Organizations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">120+</div>
+                    <div class="stat-label">Relief Centers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-info">
+                    <div class="footer-logo">Disaster Relief Network</div>
+                    <p class="footer-description">Our mission is to provide immediate assistance during emergencies and connect affected communities with essential resources.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/requesthelp">Request Help</a></li>
+                        <li><a href="/volunteer">Volunteer</a></li>
+                        <li><a href="/reliefcenters">Relief Centers</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/login">Login/Signup</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Disaster Preparedness</a></li>
+                        <li><a href="#">Emergency Contacts</a></li>
+                        <li><a href="#">Donation Guidelines</a></li>
+                        <li><a href="#">Victim Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Emergency Contact</h4>
+                    <ul>
+                        <li><a href="tel:1-800-DISASTER">Hotline: 1-800-DISASTER</a></li>
+                        <li><a href="mailto:help@disasterrelief.org">help@disasterrelief.org</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Disaster Relief Network. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const icon = darkModeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme');
+    
+        // Check if the user prefers dark mode or has a saved theme
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            body.classList.add('dark-mode');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+    
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+    
+        // Toggle mobile menu visibility
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+    
+        const authLink = document.getElementById('authLink');
+    
+        // -------- Real login status checking --------
+        async function updateAuthLink() {
+            try {
+                const response = await fetch('/check-auth');
+                const data = await response.json();
+    
+                if (data.loggedIn) {
+                    authLink.innerHTML = `<a href="#" id="logoutBtn">Logout</a>`;
+    
+                    // Add logout event listener
+                    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await fetch('/logout');  // hit backend logout route
+                        window.location.href = '/'; // redirect home
+                    });
+                } else {
+                    authLink.innerHTML = `<a href="/login">Login/Signup</a>`;
+                }
+            } catch (error) {
+                console.error('Error checking auth:', error);
+                authLink.innerHTML = `<a href="/login">Login/Signup</a>`;
+            }
+        }
+        // Initialize the map when the page is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create map centered on India
+        var map = L.map('map').setView([20.5937, 78.9629], 5);
+        
+        // Add the OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Create custom icons for different relief center types
+        var hospitalIcon = L.divIcon({
+            html: '<i class="fas fa-hospital" style="color:#e53e3e;font-size:24px;"></i>',
+            className: 'relief-marker-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+
+        var shelterIcon = L.divIcon({
+            html: '<i class="fas fa-home" style="color:#3182ce;font-size:24px;"></i>',
+            className: 'relief-marker-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+
+        var foodIcon = L.divIcon({
+            html: '<i class="fas fa-utensils" style="color:#38a169;font-size:24px;"></i>',
+            className: 'relief-marker-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+
+        var waterIcon = L.divIcon({
+            html: '<i class="fas fa-tint" style="color:#4299e1;font-size:24px;"></i>',
+            className: 'relief-marker-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+        
+        // Define relief centers data
+        var reliefCenters = [
+            // Delhi Relief Centers
+            {
+                position: [28.6139, 77.2090],
+                name: "AIIMS Delhi",
+                address: "Sri Aurobindo Marg, Ansari Nagar, New Delhi",
+                type: "hospital",
+                details: "Capacity: 2,500 beds | Emergency Services: 24/7",
+                contact: "+91-11-26588500"
+            },
+            {
+                position: [28.6304, 77.2177],
+                name: "Safdarjung Hospital",
+                address: "Ansari Nagar West, New Delhi",
+                type: "hospital",
+                details: "Capacity: 1,500 beds | Emergency Services: 24/7",
+                contact: "+91-11-26707444"
+            },
+            {
+                position: [28.6238, 77.2080],
+                name: "Delhi Government Shelter",
+                address: "Near Safdarjung Hospital, New Delhi",
+                type: "shelter",
+                details: "Capacity: 500 persons | Services: Food, Water, Bedding",
+                contact: "+91-11-23378234"
+            },
+            {
+                position: [28.6327, 77.2190],
+                name: "Red Cross Food Center",
+                address: "AIIMS Flyover, New Delhi",
+                type: "food",
+                details: "Serves 2,000 meals daily | Open: 8 AM - 8 PM",
+                contact: "+91-11-23359379"
+            },
+            
+            // Mumbai Relief Centers
+            {
+                position: [19.0740, 72.8580],
+                name: "KEM Hospital",
+                address: "Acharya Donde Marg, Parel, Mumbai",
+                type: "hospital",
+                details: "Capacity: 1,800 beds | Emergency Services: 24/7",
+                contact: "+91-22-24136051"
+            },
+            {
+                position: [19.0748, 72.8856],
+                name: "Mumbai Municipal Shelter",
+                address: "Dadar West, Mumbai",
+                type: "shelter",
+                details: "Capacity: 800 persons | Services: Food, Water, Clothing",
+                contact: "+91-22-24226340"
+            },
+            {
+                position: [19.0821, 72.8416],
+                name: "Mumbai Water Distribution",
+                address: "Bandra West, Mumbai",
+                type: "water",
+                details: "Capacity: 100,000 liters daily | Open: 24 hours",
+                contact: "+91-22-26557000"
+            },
+            
+            // Bangalore Relief Centers
+            {
+                position: [12.9716, 77.5946],
+                name: "Victoria Hospital",
+                address: "Fort Road, Near City Market, Bengaluru",
+                type: "hospital",
+                details: "Capacity: 1,000 beds | Trauma Center Available",
+                contact: "+91-80-26703294"
+            },
+            {
+                position: [12.9793, 77.5913],
+                name: "Bangalore Relief Shelter",
+                address: "Near Majestic, Bengaluru",
+                type: "shelter",
+                details: "Capacity: 600 persons | Services: Food, Medical Care",
+                contact: "+91-80-22975803"
+            },
+            {
+                position: [12.9254, 77.5966],
+                name: "Bangalore Food Aid Center",
+                address: "Jayanagar, Bengaluru",
+                type: "food",
+                details: "Serves 1,500 meals daily | Open: 7 AM - 9 PM",
+                contact: "+91-80-26457889"
+            }
+        ];
+        
+        // Function to get the appropriate icon based on relief center type
+        function getIcon(type) {
+            switch(type) {
+                case 'hospital':
+                    return hospitalIcon;
+                case 'shelter':
+                    return shelterIcon;
+                case 'food':
+                    return foodIcon;
+                case 'water':
+                    return waterIcon;
+                default:
+                    return L.divIcon({
+                        html: '<i class="fas fa-map-marker-alt" style="color:#718096;font-size:24px;"></i>',
+                        className: 'relief-marker-icon',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+            }
+        }
+        
+        // Add all relief centers to the map
+        reliefCenters.forEach(function(center) {
+            var marker = L.marker(center.position, {icon: getIcon(center.type)}).addTo(map);
+            
+            // Create popup content with HTML formatting
+            var popupContent = `
+                <div style="min-width: 200px;">
+                    <h4 style="margin-bottom: 5px; color: #2b6cb0;">${center.name}</h4>
+                    <p style="margin: 0; font-size: 12px; color: #4a5568;">${center.address}</p>
+                    <p style="margin: 5px 0; font-size: 13px;">${center.details}</p>
+                    <p style="margin: 0; font-size: 12px;">Contact: ${center.contact}</p>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent);
+        });
+        
+        // Add a legend to explain the icons
+        var legend = L.control({position: 'bottomright'});
+        
+        legend.onAdd = function(map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.style.backgroundColor = 'var(--bg-white)';
+            div.style.color = 'var(--text-dark)';
+            div.style.padding = '10px';
+            div.style.borderRadius = '5px';
+            div.style.boxShadow = 'var(--shadow)';
+            
+            div.innerHTML = '<h4 style="margin-top: 0; margin-bottom: 10px;">Relief Centers</h4>' +
+                            '<div><i class="fas fa-hospital" style="color:#e53e3e;"></i> Hospitals</div>' +
+                            '<div><i class="fas fa-home" style="color:#3182ce;"></i> Shelters</div>' +
+                            '<div><i class="fas fa-utensils" style="color:#38a169;"></i> Food Centers</div>' +
+                            '<div><i class="fas fa-tint" style="color:#4299e1;"></i> Water Centers</div>';
+            
+            return div;
+        };
+        
+        legend.addTo(map);
+        
+        // Add CSS for the markers
+        var style = document.createElement('style');
+        style.textContent = `
+            .relief-marker-icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                width: 30px !important;
+                height: 30px !important;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Make sure the map displays correctly
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 0);
+        
+        // Dark mode compatibility
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 300);
+        });
+    });
+        // Run on page load
+        updateAuthLink();
+    </script>
+    
+</body>
+</html>
